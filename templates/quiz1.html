@@ -58,28 +58,123 @@
     </style>
 </head>
 <body>
+    <!-- Navigation bar -->
     <div class="navbar">
         <a href="beat-and-tempo.html">Beat and Tempo</a>
         <a href="duration-and-symbols.html">Duration and Symbols</a>
         <a href="subdividing.html">Subdividing</a>
         <a href="quiz">Quiz</a>
     </div>
-    <div class="container">
-        <p>Question 1) Match these songs to the tempo terms by dragging and dropping the videos onto the terms.</p>
-        <div class="row">
-            <div class="drop-container" id="drop-container-adagio">Adagio</div>
-            <div class="drop-container" id="drop-container-andante">Andante</div>
-            <div class="drop-container" id="drop-container-allegro">Allegro</div>
-        </div>
-        <div class="row">
-        <iframe class="drop-container" width="420" height="315" src="https://www.youtube.com/embed/02AlIVN0pEA"></iframe>
-        <iframe class="drop-container" width="420" height="315" src="https://www.youtube.com/embed/p_ftrysaMHU"></iframe>
-        <iframe class="drop-container" width="420" height="315" src="https://www.youtube.com/embed/2-cq6rjs3XY&t=18s"></iframe>
-        
 
-    </div>
-    <div class="next-button">
-        <a href="quiz2">Next</a>
-    </div>
+    <!-- Container for quiz content -->
+    <div class="container">
+        <!-- Display the current score of the user -->
+        <p>Score: <span id="user-score">0</span></p>
+
+        <!-- Quiz question and content -->
+            <p>Question 1) Match these songs to the tempo terms by clicking on the buttons below the videos.</p>
+            <div class="row">
+                <div>
+                    <button class="match-button" id="button-adagio">Adagio</button>
+                    <iframe class="video" width="420" height="315" src="https://www.youtube.com/embed/02AlIVN0pEA"></iframe>
+                    <button class="video-button" id="video-button-1" disabled>Video 1</button>
+                </div>
+                <div>
+                    <button class="match-button" id="button-andante">Andante</button>
+                    <iframe class="video" width="420" height="315" src="https://www.youtube.com/embed/p_ftrysaMHU"></iframe>
+                    <button class="video-button" id="video-button-2" disabled>Video 2</button>
+                </div>
+                <div>
+                    <button class="match-button" id="button-allegro">Allegro</button>
+                    <iframe class="video" width="420" height="315" src="https://www.youtube.com/embed/2-cq6rjs3XY&t=18s"></iframe>
+                    <button class="video-button" id="video-button-3" disabled>Video 3</button>
+                </div>
+            </div>
+            <!-- Next button -->
+            <div class="next-button">
+                <a href="quiz2" id="next-button">Next</a>
+            </div>
+                <!-- JavaScript code -->
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        const adagioButton = document.getElementById("button-adagio");
+                        const andanteButton = document.getElementById("button-andante");
+                        const allegroButton = document.getElementById("button-allegro");
+                        const videoButtons = document.querySelectorAll(".video-button");
+                        videoButtons.forEach(function(button) {
+                            button.disabled = false;
+                            button.ruledOut = false;
+                        });
+                        const userScore = document.getElementById("user-score");
+                        const nextButton = document.getElementById("next-button");
+
+                        let score = 0;
+                        let currentRhythm = 0;
+
+                        adagioButton.addEventListener("click", function() {
+                            adagioButton.style.backgroundColor = "red";
+                            andanteButton.style.backgroundColor = ""; // Make other buttons neutral
+                            allegroButton.style.backgroundColor = ""; // Make other buttons neutral
+
+                            videoButtons.forEach(function(button) {
+                                if (button.ruledOut == false) {
+                                    button.disabled = false;
+                                }
+                            });
+                            currentRhythm = 1;
+                        });
+
+                        andanteButton.addEventListener("click", function() {
+                            andanteButton.style.backgroundColor = "red";
+                            adagioButton.style.backgroundColor = ""; // Make other buttons neutral
+                            allegroButton.style.backgroundColor = ""; // Make other buttons neutral
+
+                            videoButtons.forEach(function(button) {
+                                if (button.ruledOut == false) {
+                                    button.disabled = false;
+                                }
+                            });
+                            currentRhythm = 2;
+                        });
+
+                        allegroButton.addEventListener("click", function() {
+                            allegroButton.style.backgroundColor = "red";
+                            adagioButton.style.backgroundColor = ""; // Make other buttons neutral
+                            andanteButton.style.backgroundColor = ""; // Make other buttons neutral
+
+                            videoButtons.forEach(function(button) {
+                                if (button.ruledOut == false) {
+                                    button.disabled = false;
+                                }
+                            });
+                            currentRhythm = 3;
+                            checkScore();
+                        });
+
+                        videoButtons.forEach(function(button) {
+                            button.addEventListener("click", function() {
+                                const videoId = button.id.split("-")[2];
+                                if (currentRhythm == videoId) {
+                                    button.style.backgroundColor = "green";
+                                    adagioButton.style.backgroundColor = (videoId === "1") ? "green" : adagioButton.style.backgroundColor;
+                                    andanteButton.style.backgroundColor = (videoId === "2") ? "green" : andanteButton.style.backgroundColor;
+                                    allegroButton.style.backgroundColor = (videoId === "3") ? "green" : allegroButton.style.backgroundColor;
+                                    adagioButton.disabled = (videoId === "1") ? true : adagioButton.disabled;
+                                    andanteButton.disabled = (videoId === "2") ? true : andanteButton.disabled;
+                                    allegroButton.disabled = (videoId === "3") ? true : allegroButton.disabled;
+                                    adagioButton.ruledOut = (videoId === "1") ? true : adagioButton.ruledOut;
+                                    andanteButton.ruledOut = (videoId === "2") ? true : andanteButton.ruledOut;
+                                    allegroButton.ruledOut = (videoId === "3") ? true : allegroButton.ruledOut;
+                                    videoButtons.forEach(function(button) {
+                                        button.disabled = true;
+                                    });
+                                    score++;
+                                    userScore.textContent = score;
+                                    button.ruledOut = true; // Add the ruledOut property
+                                }
+                            });
+                        });
+                        });
+                </script>
 </body>
 </html>
