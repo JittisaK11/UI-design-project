@@ -1,69 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elements of Rhythm</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .navbar {
-            overflow: hidden;
-            background-color: #8eadd4;
-        }
-        .navbar a {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-        .navbar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-        .container {
-            padding: 20px;
-        }
-        .row {
-            display: flex;  /* Utilizing Flexbox */
-            justify-content: space-around;  /* Even spacing */
-            align-items: center;  /* Align vertically */
-        }
-        .drop-container {
-            flex: 1;  /* Each container will flexibly take up equal space */
-            margin: 10px;  /* Margin for spacing between containers */
-            text-align: center;
-            padding: 20px;
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
-        }
-        .next-button {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .next-button a {
-            padding: 10px 20px;
-            background-color: #8eadd4;
-            color: white;
-            text-decoration: none;
-        }
-        .next-button a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-    </style>
-</head>
-<body>
-    <div class="navbar">
-        <a href="beat-and-tempo.html">Beat and Tempo</a>
-        <a href="duration-and-symbols.html">Duration and Symbols</a>
-        <a href="subdividing.html">Subdividing</a>
-        <a href="quiz">Quiz</a>
-    </div>
+{% extends 'layout.html' %}
+
+{% block content %}
     <div class="container">
         <p>Question 2) Which of these songs feature an upbeat tempo vs. downbeat tempo?
         </p>
@@ -81,5 +18,5 @@
     <div class="next-button">
         <a href="quiz3">Next</a>
     </div>
-</body>
-</html>
+
+{% endblock %}

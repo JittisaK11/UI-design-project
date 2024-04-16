@@ -14,6 +14,10 @@ def main():
 def quiz():
    return render_template('quiz.html')
 
+@app.route('/duration-and-symbols-1')
+def duration_and_symbols():
+    return render_template('duration-and-symbols-1.html')
+
 @app.route('/quiz<int:id>', methods=['GET', 'POST'])
 def quiz_id(id):
     # Constructs the filename based on the quiz ID

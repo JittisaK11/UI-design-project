@@ -1,48 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Elements of Rhythm</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-            }
-            .navbar {
-                overflow: hidden;
-                background-color: #8eadd4;
-            }
-            .navbar a {
-                float: left;
-                display: block;
-                color: white;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-            }
-            .navbar a:hover {
-                background-color: #ddd;
-                color: black;
-            }
-            .container {
-                padding: 20px;
-            }
-        </style>
-    </head>
-    <body>
+{% extends 'layout.html' %}
 
-        <div class="navbar">
-            <a href="beat-and-tempo.html">Beat and Tempo</a>
-            <a href="duration-and-symbols.html">Duration and Symbols</a>
-            <a href="subdividing.html">Subdividing</a>
-            <a href="quiz">Quiz</a>
-        </div>
-
-        <div class="container">
+{% block content %}
+    <div class="container">
             <h1>Welcome to the world of music theory!</h1>
             <p>Let’s begin by learning the basics of music through rhythm! Navigate the menu above to learn about key elements of rhythm.</p>
             <p>When you’re done learning, take the quiz to test your knowledge.</p>
-        </div>
+    </div>
+{% endblock %}
 
-    </body>
-</html>
+
+
