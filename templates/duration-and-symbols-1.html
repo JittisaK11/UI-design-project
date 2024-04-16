@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <head>
+  <script>
+  function playNoteSound(note) {
+    var audio = new Audio(note + '.mp3'); // Replace with your actual audio file paths
+    audio.play();
+  }
+  </script>
+  </head>
+  <body>
+
+  <div class="content">
+    <h2>Note Symbols</h2>
+    <p>Some common note symbols and their durations are shown here.</p>
+    <p>To make sense of them, think about dividing a measure into halves, quarters, eighths, and sixteenths.</p>
+
+    <!-- Visualization and play buttons here -->
+    <img src="https://app.gemoo.com/share/image-annotation/638965102835343360?codeId=vJ3R0m3exJaNO&origin=imageurlgenerator&card=638965101996482560" alt="musical notes chart">
+
+    <!-- Example for a single note -->
+    <div class="note">
+      <img src="whole-note.png" alt="Whole Note">
+      <button onclick="playNoteSound('whole-note')">Play Whole Note</button>
+    </div>
+    <!-- Repeat the above block for half note, quarter note, etc., with appropriate image and audio files -->
+
+    <!-- Navigation Buttons -->
+    <a href="beat-and-tempo.html" class="nav-button">Back</a>
+    <a href="duration-and-symbols-2.html" class="nav-button">Next</a>
+  </div>
+
+  </body>
+{% endblock %}
