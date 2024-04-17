@@ -6,6 +6,7 @@ app.secret_key = 'your_secret_key'
 # ROUTES
 @app.route('/')
 def home():
+    session['score'] = 0
     return render_template('home.html')
 
 # Beat and Tempo page route
@@ -27,6 +28,26 @@ def duration_and_symbols():
 def subdividing():
     return render_template('subdividing.html')
 
+# Quiz page route
+@app.route('/', methods=['GET', 'POST'])
+def main():
+    return render_template('index.html')
+    
+@app.route('/score', methods=['GET'])
+def get_score():
+    if 'score' in session:
+        return jsonify({'score': session['score']})
+    else:
+        return jsonify({'score': 0})
+    
+@app.route('/increment-score', methods=['POST'])
+def increment_score():
+    if 'score' in session:
+        session['score'] += 1
+    else:
+        session['score'] = 1
+    return jsonify({'success': True})
+
 @app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
     # Set initial score to 0 if it doesn't exist in session
@@ -43,8 +64,14 @@ def specific_quiz(quiz_number):
         return render_template(quiz_template)
     except FileNotFoundError:
         abort(404)  # If the specific quiz template is not found, show a 404 error
-
-
+	
+@app.route('/reset-score', methods=['POST'])
+def reset_score():
+    if 'score' in session:
+        session['score'] = 0
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False, 'message': 'Score not found in session'})
 
 if __name__ == '__main__':
    app.run(debug=True)
