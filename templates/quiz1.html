@@ -1,60 +1,126 @@
-<!-- quiz.html -->
-{% extends "layout.html" %}
-
-{% block title %}
-Elements of Rhythm
-{% endblock %}
+{% extends 'layout.html' %}
 
 {% block content %}
-<style>
-    .row {
-        display: flex; /* Utilizing Flexbox */
-        justify-content: space-evenly; /* Even spacing */
-        align-items: center; /* Align vertically */
-    }
-    .match-button, .video-button {
-        margin: 5px;
-        margin-bottom: 50px;
-    }
-    iframe {
-        display: block; /* Remove default inline display of iframes */
-        margin: 10px 0; /* Provide some spacing above and below the video */
-        width: 100%;
-        height: auto;
-    }
-</style>
-<!-- Content specific to quiz.html -->
-<p>Score: <span id="user-score">0</span></p>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elements of Rhythm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            padding: 20px;
+        }
+        .row {
+            display: flex;  /* Utilizing Flexbox */
+            justify-content: space-around;  /* Even spacing */
+            align-items: center;  /* Align vertically */
+        }
+        .drop-container {
+            flex: 1;  /* Each container will flexibly take up equal space */
+            margin: 10px;  /* Margin for spacing between containers */
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+        .next-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .next-button a {
+            padding: 10px 20px;
+            background-color: #8eadd4;
+            color: white;
+            text-decoration: none;
+        }
+        .next-button a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Container for quiz content -->
+    <div class="container">
+        <!-- Display the current score of the user -->
+        <p>Current Score: <span id="current-score"></span></p>
 
         <!-- Quiz question and content -->
             <p>Question 1) Match these songs to the tempo terms by clicking on the buttons below the videos.</p>
             <div class="row">
-                <button class="match-button" id="button-adagio">Adagio</button>
-                <button class="match-button" id="button-andante">Andante</button>
-                <button class="match-button" id="button-allegro">Allegro</button>
-            </div>
-            <div class="row">
-                <div>
-                    <iframe class="video" width="420" height="315" src="https://www.youtube.com/embed/02AlIVN0pEA"></iframe>
-                    <button class="video-button" id="video-button-1" disabled>Video 1</button>
-                </div>
-                <div>
-                    <iframe class="video" width="420" height="315" src="https://www.youtube.com/embed/VOLy6JxEDLw"></iframe>
-                    <button class="video-button" id="video-button-2" disabled>Video 2</button>
-                </div>
-                <div>
-                    <iframe class="video" width="420" height="315" src="https://www.youtube.com/embed/zplA4AnhCk8"></iframe>
-                    <button class="video-button" id="video-button-3" disabled>Video 3</button>
-                </div>
+                <div style="display: flex; justify-content: space-around;">
+                    <div>
+                        <button class="match-button" id="button-adagio">Adagio</button>
+                        <iframe class="video" width="400" height="300" src="https://www.youtube.com/embed/02AlIVN0pEA"></iframe>
+                        <button class="video-button" id="video-button-1" disabled>Video 1</button>
+                    </div>
+
+                    <div>
+                        <button class="match-button" id="button-andante">Andante</button>
+                        <iframe class="video" width="400" height="300" src="https://www.youtube.com/embed/VOLy6JxEDLw"></iframe>
+                        <button class="video-button" id="video-button-2" disabled>Video 2</button>
+                    </div>
+
+                    <div>
+                        <button class="match-button" id="button-allegro">Allegro</button>
+                        <iframe class="video" width="400" height="300" src="https://www.youtube.com/embed/zplA4AnhCk8"></iframe>
+                        <button class="video-button" id="video-button-3" disabled>Video 3</button>
+                    </div>
+                    </div>
             </div>
             <!-- Next button -->
             <div class="next-button">
                 <a href="quiz2" id="next-button">Next</a>
             </div>
-<!-- Include more content such as your quiz question, options, etc. -->
-
-<script src="{{ url_for('static', filename='quiz_script.js') }}">
+                <!-- JavaScript code -->
+                <script>
                     document.addEventListener("DOMContentLoaded", function() {
+            function fetchAndUpdateScore() {
+                fetch('/score')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch score');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const currentScore = document.getElementById("current-score");
+                    currentScore.textContent = data.score; // Update the score element
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        function incrementScore() {
+            fetch('/increment-score', {
+                method: 'POST'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to increment score');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // If increment successful, fetch and update the score
+                fetchAndUpdateScore();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+            // Call the function to fetch and update the score when the page loads
+            fetchAndUpdateScore();
+
                         const adagioButton = document.getElementById("button-adagio");
                         const andanteButton = document.getElementById("button-andante");
                         const allegroButton = document.getElementById("button-allegro");
@@ -106,7 +172,6 @@ Elements of Rhythm
                                 }
                             });
                             currentRhythm = 3;
-                            checkScore();
                         });
 
                         videoButtons.forEach(function(button) {
@@ -126,13 +191,15 @@ Elements of Rhythm
                                     videoButtons.forEach(function(button) {
                                         button.disabled = true;
                                     });
-                                    score++;
-                                    userScore.textContent = score;
+                                    incrementScore();
+                                    fetchAndUpdateScore();
                                     button.ruledOut = true; // Add the ruledOut property
                                 }
                             });
                         });
                         });
-</script>
+                </script>
+</body>
+</html>
 
 {% endblock %}
