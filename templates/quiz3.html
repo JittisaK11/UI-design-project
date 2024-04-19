@@ -1,8 +1,50 @@
-{% extends "layout.html" %}
-
+{% extends 'layout.html' %}
 
 {% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elements of Rhythm</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            padding: 20px;
+        }
+        .row {
+            display: flex;  /* Utilizing Flexbox */
+            justify-content: space-around;  /* Even spacing */
+            align-items: center;  /* Align vertically */
+            justify-items: center;
+        }
+        .drop-container {
+            flex: 1;  /* Each container will flexibly take up equal space */
+            margin: 10px;  /* Margin for spacing between containers */
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+        .next-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .next-button a {
+            padding: 10px 20px;
+            background-color: #8eadd4;
+            color: white;
+            text-decoration: none;
+        }
+        .next-button a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
         .container img {
             width: 100px;  /* Fixed width for all images */
             height: auto;  /* Height adjusts according to the aspect ratio */
@@ -17,7 +59,8 @@
         }
         .grid-item {
             border: 1px solid black; /* Border to visualize the grid item */
-            height: 50px; /* Fixed height, adjust as needed */
+            height: 100px; /* Fixed height, adjust as needed */
+            width: auto;
         }
         /* Color classes for different grid items */
         .blue { background-color: #87CEEB; }
@@ -37,17 +80,29 @@
             visibility: hidden;
         }
 
+        .grid-item.dragover {
+            background-color: #e6ff43; /* Light blue background */
+        }
+
+        /* Highlight when item is dragged over */
+        .dragover {
+            background-color: yellow;
+        }
     </style>
-
-
+</head>
+<body>
     <div class="container">
+
+        <!-- Display the current score of the user -->
+        <p>Current Score: <span id="current-score"></span></p>
+                
         <p>Question 3) Drag and drop the correct note symbols for the corresponding duration blocks.</p>
         <div class="notes-container">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Music-wholenote.svg" alt="whole note">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Music-halfnote.svg" alt="half note">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Music-quarternote.svg" alt="quarter note">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Eighth_Note.JPG" alt="eighth note">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/57/Music-sixteenthnote.svg" alt="sixteenth note">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Music-wholenote.svg" alt="whole note" draggable="true" revert="true">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Music-halfnote.svg" alt="half note" draggable="true" revert="true">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Music-quarternote.svg" alt="quarter note" draggable="true" revert="true">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Eighth_Note.JPG" alt="eighth note" draggable="true" revert="true">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/57/Music-sixteenthnote.svg" alt="sixteenth note" draggable="true" revert="true">
         </div>
         <div class="grid-container">
             <!-- Row 1 -->
@@ -100,4 +155,130 @@
         <a href="quiz4">Next</a>
     </div>
 
-    {% endblock %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        function fetchAndUpdateScore() {
+            fetch('/score')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch score');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const currentScore = document.getElementById("current-score");
+                    currentScore.textContent = data.score; // Update the score element
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+    function incrementScore() {
+        fetch('/increment-score', {
+                method: 'POST'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to increment score');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // If increment successful, fetch and update the score
+                fetchAndUpdateScore();
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    // Call the function to fetch and update the score when the page loads
+    fetchAndUpdateScore();
+
+    // Drag and drop functionality
+    const notesContainer = document.querySelector('.notes-container');
+    const gridItems = document.querySelectorAll('.grid-item');
+
+    let draggedNote = null;
+
+    function dragStart(event) {
+        draggedNote = event.target;
+        event.dataTransfer.setData('text/plain', draggedNote.alt);
+    }
+
+    function dragOver(event) {
+        event.preventDefault();
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        const droppedNote = event.target;
+        const noteSymbol = event.dataTransfer.getData('text/plain');
+
+        // Check if the dropped note is a whole note and if it's dropped on the blue box (row 1)
+        if (noteSymbol === 'whole note' && droppedNote.classList.contains('blue')) {
+            droppedNote.innerHTML = `<img src="${draggedNote.src}" alt="${draggedNote.alt}">`;
+            draggedNote.style.visibility = 'hidden';
+            incrementScore();
+            fetchAndUpdateScore();
+        }
+
+        // Check if the dropped note is a half note and if it's dropped on the green box (row 2)
+        if (noteSymbol === 'half note' && droppedNote.classList.contains('green')) {
+            droppedNote.innerHTML = `<img src="${draggedNote.src}" alt="${draggedNote.alt}">`;
+            draggedNote.style.visibility = 'hidden';
+            incrementScore();
+            fetchAndUpdateScore();
+        }
+
+        if (noteSymbol === 'quarter note' && droppedNote.classList.contains('yellow')) {
+            droppedNote.innerHTML = `<img src="${draggedNote.src}" alt="${draggedNote.alt}">`;
+            draggedNote.style.visibility = 'hidden';
+            incrementScore();
+            fetchAndUpdateScore();
+        }
+
+        if (noteSymbol === 'eighth note' && droppedNote.classList.contains('orange')) {
+            droppedNote.innerHTML = `<img src="${draggedNote.src}" alt="${draggedNote.alt}">`;
+            draggedNote.style.visibility = 'hidden';
+            incrementScore();
+            fetchAndUpdateScore();
+        }
+        if (noteSymbol === 'sixteenth note' && droppedNote.classList.contains('red')) {
+            droppedNote.innerHTML = `<img src="${draggedNote.src}" alt="${draggedNote.alt}">`;
+            draggedNote.style.visibility = 'hidden';
+            incrementScore();
+            fetchAndUpdateScore();
+        }
+    }
+
+    function mouseEnter(event) {
+        event.target.classList.add('hovered'); // Add the hovered class on mouse enter
+    }
+
+    function mouseLeave(event) {
+        event.target.classList.remove('hovered'); // Remove the hovered class on mouse leave
+    }
+
+    // Add event listeners for mouse enter and leave
+    gridItems.forEach(gridItem => {
+        gridItem.addEventListener('mouseenter', mouseEnter);
+        gridItem.addEventListener('mouseleave', mouseLeave);
+    });
+
+    // Add event listeners for drag and drop functionality
+    notesContainer.addEventListener('dragstart', dragStart);
+    gridItems.forEach(gridItem => {
+        gridItem.addEventListener('dragover', dragOver);
+        gridItem.addEventListener('drop', drop);
+    });
+});
+
+
+    </script>
+</body>
+</html>
+
+{% endblock %}
