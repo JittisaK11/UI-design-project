@@ -1,31 +1,114 @@
-
 {% extends "layout.html" %}
 
-
 {% block content %}
-    <style>
-        img {
-            width: 200px;
+<style>
+    img {
+        width: 200px;
+        cursor: pointer;
+    }
+
+    .correct {
+        border: 2px solid green;
+        animation: pulse 0.5s 3;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
         }
-    </style>
 
+        50% {
+            transform: scale(1.1);
+        }
 
-    <div class="container">
-        <p>Question 4) Choose the correct answer to match the sound</p>
-        <p>Click the play button to listen to the rhythm pattern. Choose the picture that matches the rhythm pattern you hear.</p>
-        <audio controls>
-            <source src="{{ url_for('static', filename='quiz4.m4a') }}" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
-        <div class="rhythm-images">
-            <img src="{{ url_for('static', filename='quiz4_1.png') }}" alt="Rhythm pattern 1" class="rhythm-image">
-            <img src="{{ url_for('static', filename='quiz4_2.png') }}" alt="Rhythm pattern 2" class="rhythm-image">
-            <img src="{{ url_for('static', filename='quiz4_3.png') }}" alt="Rhythm pattern 3" class="rhythm-image">
-        </div>
+        100% {
+            transform: scale(1);
+        }
+    }
 
+    .next-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .next-button a {
+            padding: 10px 20px;
+            background-color: #8eadd4;
+            color: white;
+            text-decoration: none;
+        }
+        .next-button a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+</style>
+
+<div class="container">
+
+    <p>Current Score: <span id="current-score"></span></p>
+
+    <p>Question 4) Choose the correct answer to match the sound</p>
+    <p>Click the play button to listen to the rhythm pattern. Choose the picture that matches the rhythm pattern you hear.</p>
+    <audio controls>
+        <source src="{{ url_for('static', filename='quiz4.m4a') }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <div class="rhythm-images">
+        <img src="{{ url_for('static', filename='quiz4_1.png') }}" alt="Rhythm pattern 1" class="rhythm-image" onclick="checkAnswer(this)">
+        <img src="{{ url_for('static', filename='quiz4_2.png') }}" alt="Rhythm pattern 2" class="rhythm-image" onclick="checkAnswer(this)">
+        <img src="{{ url_for('static', filename='quiz4_3.png') }}" alt="Rhythm pattern 3" class="rhythm-image" onclick="checkAnswer(this)">
     </div>
-    <div class="next-button">
-        <a href="quiz6">Next</a>
-    </div>
+</div>
+<div class="next-button">
+    <a href="quiz6">Next</a>
+</div>
 
+<script>
+    function fetchAndUpdateScore() {
+        fetch('/score')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch score');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const currentScore = document.getElementById("current-score");
+                currentScore.textContent = data.score; // Update the score element
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function incrementScore() {
+        fetch('/increment-score', {
+                method: 'POST'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to increment score');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // If increment successful, fetch and update the score
+                fetchAndUpdateScore();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    // Call the function to fetch and update the score when the page loads
+    fetchAndUpdateScore();
+
+    function checkAnswer(element) {
+        // Manually specify the correct image URL
+        var correctAnswer = "/static/quiz4_3.png"; // Change this to the correct image URL
+        if (element.src.endsWith(correctAnswer)) {
+            element.classList.add("correct");
+            incrementScore();
+        }
+    }
+</script>
 {% endblock %}

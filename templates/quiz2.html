@@ -13,22 +13,7 @@
         body {
             font-family: Arial, sans-serif;
         }
-        .navbar {
-            overflow: hidden;
-            background-color: #8eadd4;
-        }
-        .navbar a {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-        .navbar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
+
         .container {
             padding: 20px;
         }
@@ -38,14 +23,24 @@
             align-items: center;  /* Align vertically */
         }
         .drop-container {
-            flex: 1;  /* Each container will flexibly take up equal space */
-            margin: 10px;  /* Margin for spacing between containers */
-            text-align: center;
-            padding: 20px;
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
-        }
+        flex: 1; /* Each container will flexibly take up equal space */
+        margin: 10px; /* Margin for spacing between containers */
+        text-align: center;
+        padding: 20px;
+        background-color: #f4f4f4;
+        border: 1px solid #ddd;
+        box-sizing: border-box;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .drop-container.dragover {
+        background-color: lightblue; /* Change color when item is hovering over */
+    }
+        .match-button {
+        margin: 0 auto; /* Center the match button horizontally */
+    }
+
         .next-button {
             text-align: center;
             margin-top: 20px;
@@ -68,22 +63,26 @@
         <!-- Display the current score of the user -->
         <p>Current Score: <span id="current-score"></span></p>
                 
-        <p>Question 2) Which of these songs feature an upbeat tempo vs. downbeat tempo?
-        </p>
+        <p>Question 2) Which of these songs feature an upbeat tempo vs. downbeat tempo? Drag the labels into the drop bins like before.</p>
         <div class="row">
-            <button id="drop-container-upbeat">Upbeat</button>
-            <button id="drop-container-downbeat">Downbeat</button>
-        </div>
-        <div class="row">
-            <iframe class="drop-container" width="420" height="315" src="https://www.youtube.com/embed/23GIn0h0Sn4"></iframe>
-            <iframe class="drop-container" width="420" height="315" src="https://www.youtube.com/embed/oYgrFyXxZ0g"></iframe>
-        </div>
-        <div class="row">
-            <button class="video-button" id="video-button-1" disabled>Video 1</button>
-            <button class="video-button" id="video-button-2" disabled>Video 2</button>
-        </div>
+            <div style="display: flex; justify-content: space-around;">
+                <div>
+                    <div class="draggable-container" style="text-align: center;">
+                        <button class="match-button" id="button-upbeat" draggable="true">Upbeat</button>
+                    </div>
+                    <iframe class="video" width="400" height="300" src="https://www.youtube.com/embed/23GIn0h0Sn4"></iframe>
+                    <div class="drop-container" id="drop-container-1" droppable="true"></div> <!-- Drop container for video 1 -->
+                </div>
 
-    </div>
+                <div>
+                    <div class="draggable-container" style="text-align: center;">
+                        <button class="match-button" id="button-downbeat" draggable="true">Downbeat</button>
+                    </div>
+                    <iframe class="video" width="400" height="300" src="https://www.youtube.com/embed/oYgrFyXxZ0g"></iframe>
+                    <div class="drop-container" id="drop-container-2" droppable="true"></div> <!-- Drop container for video 2 -->
+                </div>
+            </div>
+        </div>
     <div class="next-button">
         <a href="quiz3">Next</a>
     </div>
@@ -128,58 +127,53 @@
     
             // Call the function to fetch and update the score when the page loads
             fetchAndUpdateScore();
-    
-            const upbeatButton = document.getElementById("drop-container-upbeat");
-            const downbeatButton = document.getElementById("drop-container-downbeat");
-            const videoButtons = document.querySelectorAll(".video-button");
-            videoButtons.forEach(function(button) {
-                button.disabled = false;
-                button.ruledOut = false;
+            let droppable = [true, true, true];
+
+            document.getElementById('button-upbeat').addEventListener('dragstart', function(event) {
+            event.dataTransfer.setData('text/plain', 'button-upbeat'); // Set the ID of the draggable element
+            });
+            document.getElementById('button-downbeat').addEventListener('dragstart', function(event) {
+                event.dataTransfer.setData('text/plain', 'button-downbeat'); // Set the ID of the draggable element
             });
     
-            upbeatButton.addEventListener("click", function() {
-                upbeatButton.style.backgroundColor = "red";
-                downbeatButton.style.backgroundColor = ""; // Make other buttons neutral
-                videoButtons.forEach(function(button) {
-                    if (button.ruledOut == false) {
-                        button.disabled = false;
-                    }
-                });
-                currentRhythm = 2; // Button 2 corresponds to upbeat
+            // Add drag and drop event listeners to drop containers
+        const dropContainers = document.querySelectorAll('.drop-container');
+        dropContainers.forEach((container, index) => {
+            container.addEventListener('dragenter', function(event) {
+                event.preventDefault();
+                if (droppable[index]) {
+                    this.style.backgroundColor = 'yellow'; // Change background color on drag enter if droppable
+                }
             });
-    
-            downbeatButton.addEventListener("click", function() {
-                downbeatButton.style.backgroundColor = "red";
-                upbeatButton.style.backgroundColor = ""; // Make other buttons neutral
-                videoButtons.forEach(function(button) {
-                    if (button.ruledOut == false) {
-                        button.disabled = false;
-                    }
-                });
-                currentRhythm = 1; // Button 1 corresponds to downbeat
+
+            container.addEventListener('dragover', function(event) {
+                event.preventDefault();
+                if (droppable[index]) {
+                    this.style.backgroundColor = 'yellow'; // Change background color on drag over if droppable
+                }
             });
-    
-            videoButtons.forEach(function(button) {
-                button.addEventListener("click", function() {
-                    const videoId = button.id.split("-")[2];
-                    if (currentRhythm == videoId) {
-                        button.style.backgroundColor = "green";
-                        downbeatButton.style.backgroundColor = (videoId === "1") ? "green" : downbeatButton.style.backgroundColor;
-                        upbeatButton.style.backgroundColor = (videoId === "2") ? "green" : upbeatButton.style.backgroundColor;
-                        downbeatButton.disabled = (videoId === "1") ? true : downbeatButton.disabled;
-                        upbeatButton.disabled = (videoId === "2") ? true : upbeatButton.disabled;
-                        downbeatButton.ruledOut = (videoId === "1") ? true : downbeatButton.ruledOut;
-                        upbeatButton.ruledOut = (videoId === "2") ? true : downbeatButton.ruledOut;
-                        videoButtons.forEach(function(button) {
-                            button.disabled = true;
-                        });
-                        incrementScore();
-                        fetchAndUpdateScore();
-                        button.ruledOut = true; // Add the ruledOut property
+            container.addEventListener('dragleave', function() {
+                if (droppable[index]) {
+                this.style.backgroundColor = '#f4f4f4'; // Reset background color on drag leave
+                }
+            });
+            container.addEventListener('drop', function(event) {
+                event.preventDefault();
+                if (droppable[index]) {
+                    const draggableId = event.dataTransfer.getData("text/plain");
+                    if ((draggableId === 'button-upbeat' && this.id === 'drop-container-2') ||
+                        (draggableId === 'button-downbeat' && this.id === 'drop-container-1')) {
+                        this.style.backgroundColor = 'green'; // Turn container green if correct item dropped
+                        incrementScore(); // Increment score if correct item dropped
+                        droppable[index] = false; // Set droppable to false after correct drop
+                    } else {
+                        this.style.backgroundColor = 'red'; // Reset background color if incorrect drop
                     }
-                });
+                }
             });
         });
+    });
+
     </script>
     
 </body>

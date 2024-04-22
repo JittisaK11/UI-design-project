@@ -2,6 +2,8 @@ from flask import Flask, render_template, session, request, jsonify
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
+# Initialize an empty list to store scores
+scores = []
 
 # ROUTES
 @app.route('/')
@@ -72,6 +74,25 @@ def reset_score():
         return jsonify({'success': True})
     else:
         return jsonify({'success': False, 'message': 'Score not found in session'})
+    
+@app.route('/previous-scores', methods=['GET'])
+def get_previous_scores():
+    # Return the list of previous scores
+    return jsonify(scores)
+
+@app.route('/update-scores', methods=['POST'])
+def update_scores():
+    try:
+        # Add the current score to the scores list along with the current date
+        if 'score' in session:
+            scores.append({'score': session['score']})
+            # Clear the session score
+            session.pop('score', None)
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'message': 'Score not found in session'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
 
 if __name__ == '__main__':
    app.run(debug=True)

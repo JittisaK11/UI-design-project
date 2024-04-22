@@ -22,14 +22,19 @@
             align-items: center;  /* Align vertically */
         }
         .drop-container {
-            flex: 1;  /* Each container will flexibly take up equal space */
-            margin: 10px;  /* Margin for spacing between containers */
-            text-align: center;
-            padding: 20px;
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
-        }
+        flex: 1; /* Each container will flexibly take up equal space */
+        margin: 10px; /* Margin for spacing between containers */
+        text-align: center;
+        padding: 20px;
+        background-color: #f4f4f4;
+        border: 1px solid #ddd;
+        box-sizing: border-box;
+    }
+
+    .drop-container.dragover {
+        background-color: lightblue; /* Change color when item is hovering over */
+    }
+
         .next-button {
             text-align: center;
             margin-top: 20px;
@@ -54,27 +59,34 @@
         <p>Current Score: <span id="current-score"></span></p>
 
         <!-- Quiz question and content -->
-            <p>Question 1) Match these songs to the tempo terms by clicking on the buttons below the videos.</p>
+            <p>Question 1) Match these songs to the tempo terms by dragging the labels to the drop bins under their corresponding video</video></p>
             <div class="row">
                 <div style="display: flex; justify-content: space-around;">
                     <div>
-                        <button class="match-button" id="button-adagio">Adagio</button>
+                        <div class="draggable-container" style="text-align: center;">
+                            <button class="match-button" id="button-adagio" draggable="true">Adagio</button>
+                        </div>
                         <iframe class="video" width="400" height="300" src="https://www.youtube.com/embed/02AlIVN0pEA"></iframe>
-                        <button class="video-button" id="video-button-1" disabled>Video 1</button>
+                        <div class="drop-container" id="drop-container-1" droppable="true"></div> <!-- Drop container for video 1 -->
                     </div>
 
                     <div>
-                        <button class="match-button" id="button-andante">Andante</button>
+                        <div class="draggable-container" style="text-align: center;">
+                            <button class="match-button" id="button-andante" draggable="true">Andante</button>
+                        </div>
                         <iframe class="video" width="400" height="300" src="https://www.youtube.com/embed/VOLy6JxEDLw"></iframe>
-                        <button class="video-button" id="video-button-2" disabled>Video 2</button>
+                        <div class="drop-container" id="drop-container-2" droppable="true"></div> <!-- Drop container for video 2 -->
                     </div>
 
                     <div>
-                        <button class="match-button" id="button-allegro">Allegro</button>
+                        <div class="draggable-container" style="text-align: center;">
+                            <button class="match-button" id="button-allegro" draggable="true">Allegro</button>
+                        </div>
                         <iframe class="video" width="400" height="300" src="https://www.youtube.com/embed/zplA4AnhCk8"></iframe>
-                        <button class="video-button" id="video-button-3" disabled>Video 3</button>
+                        <div class="drop-container" id="drop-container-3" droppable="true"></div> <!-- Drop container for video 3 -->
                     </div>
-                    </div>
+                </div>
+                
             </div>
             <!-- Next button -->
             <div class="next-button">
@@ -83,122 +95,95 @@
                 <!-- JavaScript code -->
                 <script>
                     document.addEventListener("DOMContentLoaded", function() {
-            function fetchAndUpdateScore() {
-                fetch('/score')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch score');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const currentScore = document.getElementById("current-score");
-                    currentScore.textContent = data.score; // Update the score element
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            }
-        function incrementScore() {
-            fetch('/increment-score', {
-                method: 'POST'
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to increment score');
+                        function fetchAndUpdateScore() {
+                            fetch('/score')
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Failed to fetch score');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                const currentScore = document.getElementById("current-score");
+                                currentScore.textContent = data.score; // Update the score element
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                        }
+                
+                        function incrementScore() {
+                            fetch('/increment-score', {
+                                method: 'POST'
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Failed to increment score');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                // If increment successful, fetch and update the score
+                                fetchAndUpdateScore();
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                        }
+                
+                        fetchAndUpdateScore();
+                        let droppable = [true, true, true];
+
+                        document.getElementById('button-adagio').addEventListener('dragstart', function(event) {
+                        event.dataTransfer.setData('text/plain', 'button-adagio'); // Set the ID of the draggable element
+                        });
+                        document.getElementById('button-andante').addEventListener('dragstart', function(event) {
+                            event.dataTransfer.setData('text/plain', 'button-andante'); // Set the ID of the draggable element
+                        });
+                        document.getElementById('button-allegro').addEventListener('dragstart', function(event) {
+                            event.dataTransfer.setData('text/plain', 'button-allegro'); // Set the ID of the draggable element
+                        });
+                
+                        // Add drag and drop event listeners to drop containers
+                    const dropContainers = document.querySelectorAll('.drop-container');
+                    dropContainers.forEach((container, index) => {
+                        container.addEventListener('dragenter', function(event) {
+                            event.preventDefault();
+                            if (droppable[index]) {
+                                this.style.backgroundColor = 'yellow'; // Change background color on drag enter if droppable
+                            }
+                        });
+            container.addEventListener('dragover', function(event) {
+                event.preventDefault();
+                if (droppable[index]) {
+                    this.style.backgroundColor = 'yellow'; // Change background color on drag over if droppable
                 }
-                return response.json();
-            })
-            .then(data => {
-                // If increment successful, fetch and update the score
-                fetchAndUpdateScore();
-            })
-            .catch(error => {
-                console.error('Error:', error);
             });
-        }
-
-            // Call the function to fetch and update the score when the page loads
-            fetchAndUpdateScore();
-
-                        const adagioButton = document.getElementById("button-adagio");
-                        const andanteButton = document.getElementById("button-andante");
-                        const allegroButton = document.getElementById("button-allegro");
-                        const videoButtons = document.querySelectorAll(".video-button");
-                        videoButtons.forEach(function(button) {
-                            button.disabled = false;
-                            button.ruledOut = false;
-                        });
-                        const userScore = document.getElementById("user-score");
-                        const nextButton = document.getElementById("next-button");
-
-                        let score = 0;
-                        let currentRhythm = 0;
-
-                        adagioButton.addEventListener("click", function() {
-                            adagioButton.style.backgroundColor = "red";
-                            andanteButton.style.backgroundColor = ""; // Make other buttons neutral
-                            allegroButton.style.backgroundColor = ""; // Make other buttons neutral
-
-                            videoButtons.forEach(function(button) {
-                                if (button.ruledOut == false) {
-                                    button.disabled = false;
-                                }
-                            });
-                            currentRhythm = 1;
-                        });
-
-                        andanteButton.addEventListener("click", function() {
-                            andanteButton.style.backgroundColor = "red";
-                            adagioButton.style.backgroundColor = ""; // Make other buttons neutral
-                            allegroButton.style.backgroundColor = ""; // Make other buttons neutral
-
-                            videoButtons.forEach(function(button) {
-                                if (button.ruledOut == false) {
-                                    button.disabled = false;
-                                }
-                            });
-                            currentRhythm = 2;
-                        });
-
-                        allegroButton.addEventListener("click", function() {
-                            allegroButton.style.backgroundColor = "red";
-                            adagioButton.style.backgroundColor = ""; // Make other buttons neutral
-                            andanteButton.style.backgroundColor = ""; // Make other buttons neutral
-
-                            videoButtons.forEach(function(button) {
-                                if (button.ruledOut == false) {
-                                    button.disabled = false;
-                                }
-                            });
-                            currentRhythm = 3;
-                        });
-
-                        videoButtons.forEach(function(button) {
-                            button.addEventListener("click", function() {
-                                const videoId = button.id.split("-")[2];
-                                if (currentRhythm == videoId) {
-                                    button.style.backgroundColor = "green";
-                                    adagioButton.style.backgroundColor = (videoId === "1") ? "green" : adagioButton.style.backgroundColor;
-                                    andanteButton.style.backgroundColor = (videoId === "2") ? "green" : andanteButton.style.backgroundColor;
-                                    allegroButton.style.backgroundColor = (videoId === "3") ? "green" : allegroButton.style.backgroundColor;
-                                    adagioButton.disabled = (videoId === "1") ? true : adagioButton.disabled;
-                                    andanteButton.disabled = (videoId === "2") ? true : andanteButton.disabled;
-                                    allegroButton.disabled = (videoId === "3") ? true : allegroButton.disabled;
-                                    adagioButton.ruledOut = (videoId === "1") ? true : adagioButton.ruledOut;
-                                    andanteButton.ruledOut = (videoId === "2") ? true : andanteButton.ruledOut;
-                                    allegroButton.ruledOut = (videoId === "3") ? true : allegroButton.ruledOut;
-                                    videoButtons.forEach(function(button) {
-                                        button.disabled = true;
-                                    });
-                                    incrementScore();
-                                    fetchAndUpdateScore();
-                                    button.ruledOut = true; // Add the ruledOut property
-                                }
-                            });
-                        });
-                        });
+            container.addEventListener('dragleave', function() {
+                if (droppable[index]) {
+                this.style.backgroundColor = '#f4f4f4'; // Reset background color on drag leave
+                }
+            });
+            container.addEventListener('drop', function(event) {
+                event.preventDefault();
+                if (droppable[index]) {
+                    const draggableId = event.dataTransfer.getData("text/plain");
+                    if ((draggableId === 'button-adagio' && this.id === 'drop-container-1') ||
+                        (draggableId === 'button-andante' && this.id === 'drop-container-2') ||
+                        (draggableId === 'button-allegro' && this.id === 'drop-container-3')) {
+                        this.style.backgroundColor = 'green'; // Turn container green if correct item dropped
+                        incrementScore(); // Increment score if correct item dropped
+                        droppable[index] = false; // Set droppable to false after correct drop
+                    } else {
+                        this.style.backgroundColor = 'red'; // Reset background color if incorrect drop
+                    }
+                }
+            });
+        });
+    });
                 </script>
+                
+
 </body>
 </html>
 

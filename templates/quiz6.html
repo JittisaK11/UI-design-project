@@ -15,7 +15,7 @@
         }
         .grid-item {
             border: 1px solid black; /* Border to visualize the grid item */
-            height: 50px; /* Fixed height, adjust as needed */
+            height: 60px; /* Fixed height, adjust as needed */
         }
 
         .grid-item.span-3 { grid-column: span 3; }
@@ -24,10 +24,69 @@
         .quiz6-note-image {
             width: 100px;
         }
+
+        .submit-button {
+        margin-top: 20px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .feedback-message {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+    .correct-animation {
+    color: #4CAF50;
+    animation: bounce 1s 3;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-30px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        100% {
+            transform: scale(1.1);
+        }
+    }
+
+    .next-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .next-button a {
+            padding: 10px 20px;
+            background-color: #8eadd4;
+            color: white;
+            text-decoration: none;
+        }
+        .next-button a:hover {
+            background-color: #ddd;
+            color: black;
+        }
         
     </style>
 
     <div class="container">
+        <!-- Display the current score of the user -->
+        <p>Current Score: <span id="current-score"></span></p>
+
         <p>Question 6) Choose the correct answer to match the sound</p>
         <div><audio controls>
             <source src="{{ url_for('static', filename='quiz6.m4a') }}" type="audio/mpeg">
@@ -45,13 +104,135 @@
             <img src="{{ url_for('static', filename='quiz6_1.png') }}" alt="Rhythm pattern 1" class="quiz6-note-image">
             <img src="{{ url_for('static', filename='quiz6_2.png') }}" alt="Rhythm pattern 2" class="quiz6-note-image">
             <img src="{{ url_for('static', filename='quiz6_3.png') }}" alt="Rhythm pattern 3" class="quiz6-note-image">
-            <img src="{{ url_for('static', filename='quiz6_4.png') }}" alt="Rhythm pattern 3" class="quiz6-note-image">
-            <img src="{{ url_for('static', filename='quiz6_5.png') }}" alt="Rhythm pattern 3" class="quiz6-note-image">
+            <img src="{{ url_for('static', filename='quiz6_4.png') }}" alt="Rhythm pattern 4" class="quiz6-note-image">
+            <img src="{{ url_for('static', filename='quiz6_5.png') }}" alt="Rhythm pattern 5" class="quiz6-note-image">
         </div>
+
+        <button class="submit-button" onclick="checkAnswer()">Submit</button>
+        <p class="feedback-message" id="feedback-message"></p>
 
     </div>
     <div class="next-button">
         <a href="quiz7">Next</a>
     </div>
+
+    <script>
+
+            // Define the checkAnswer() function in the global scope
+    function checkAnswer() {
+        const droppedPatterns = Array.from({ length: 4 }, () => "none");
+        const correctPattern = ['Rhythm pattern 1', 'Rhythm pattern 2', 'Rhythm pattern 3', 'Rhythm pattern 4'];
+
+        // Retrieve dropped patterns
+        const gridItems = document.querySelectorAll('.grid-container .grid-item');
+        gridItems.forEach((gridItem, index) => {
+            const noteImage = gridItem.querySelector('img');
+            if (noteImage) {
+                droppedPatterns[index] = noteImage.alt;
+            }
+        });
+
+        // Check if dropped patterns match the correct pattern
+        if (JSON.stringify(droppedPatterns) === JSON.stringify(correctPattern)) {
+            showFeedbackMessage("Correct!", true);
+        } else {
+            showFeedbackMessage("Incorrect, try again.", false);
+        }
+    }
+
+    // Function to show feedback message
+    function showFeedbackMessage(message, isCorrect) {
+        const feedbackMessage = document.getElementById("feedback-message");
+        feedbackMessage.textContent = message;
+        feedbackMessage.classList.remove("correct-animation");
+        if (isCorrect) {
+            feedbackMessage.classList.add("correct-animation");
+        }
+    }
+        document.addEventListener("DOMContentLoaded", function() {
+        const droppedPatterns = Array.from({ length: 4 }, () => "none");
+
+        function fetchAndUpdateScore() {
+            fetch('/score')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch score');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const currentScore = document.getElementById("current-score");
+                    currentScore.textContent = data.score; // Update the score element
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+    function incrementScore() {
+        fetch('/increment-score', {
+                method: 'POST'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to increment score');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // If increment successful, fetch and update the score
+                fetchAndUpdateScore();
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    // Call the function to fetch and update the score when the page loads
+    fetchAndUpdateScore();
+
+        // Drag and drop functionality
+    const notesContainer = document.querySelector('.rhythm-images');
+    const gridItems = document.querySelectorAll('.grid-container .grid-item');
+
+    let draggedNote = null;
+
+    function dragStart(event) {
+        draggedNote = event.target;
+        event.dataTransfer.setData('text/plain', draggedNote.alt);
+    }
+
+    function dragOver(event) {
+        event.preventDefault();
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        const droppedNote = event.target;
+        const noteSymbol = event.dataTransfer.getData('text/plain');
+        const noteIndex = Array.from(droppedNote.parentNode.children).indexOf(droppedNote);
+        droppedPatterns[noteIndex-1] = noteSymbol; // Update the droppedPatterns array
+        const noteImage = `<img src="${draggedNote.src}" alt="${draggedNote.alt}" style="max-width: 200%; max-height: 200%;">`;
+        droppedNote.innerHTML = noteImage;
+        draggedNote.style.visibility = 'hidden';
+        console.log(droppedPatterns); // For debugging
+    }
+
+        // Add event listeners for drag and drop functionality
+        notesContainer.addEventListener('dragstart', dragStart);
+        gridItems.forEach(gridItem => {
+        gridItem.addEventListener('dragover', dragOver);
+        gridItem.addEventListener('drop', drop);
+    
+    });
+
+    // Add event listener to the submit button
+    const submitButton = document.getElementById("submit-button");
+    submitButton.addEventListener("click", checkAnswer);
+
+});
+        
+    </script>
 
 {% endblock %}
