@@ -2,9 +2,31 @@
 
 {% block content %}
 
+<style>
+    #current-score {
+        background-color: lightgrey; /* Grey background */
+        border-radius: 10px; /* Rounded corners */
+        padding: 20px; /* Some padding */
+        text-align: center; /* Center-align text */
+        margin: 20px 0; /* Margin above and below the box */
+        display: inline-block; /* Needed to apply padding and radius */
+        width: fit-content; /* Ensures the div only takes up the necessary width */
+    }
+    
+    #current-score .score-value {
+        color: #649de4; /* Blue text for the score */
+        font-size: 24px; /* Larger font size for the score */
+        display: block; /* Ensures the score appears on the next line */
+    }
+</style>
+
 <div class="container">
-    <h1>Congrats! You got this score: </h1>
-    <div id="current-score" style="font-size: 24px;">[SCORE]</div>
+    <h1>Congrats!</h1>
+    <p>You have completed learning about the "Elements of Rhythm." We hope this becomes useful in your future musical endeavors! Wishing you lots of luck. Thank you for your visit. :)</p>
+    <div id="current-score">
+        Final Score:
+        <span class="score-value">[SCORE]</span> <!-- The actual score in blue -->
+    </div>
 
     <h2>Previous Scores:</h2>
     <table id="score-table">
@@ -25,8 +47,8 @@
                 return response.json();
             })
             .then(data => {
-                const currentScore = document.getElementById("current-score");
-                currentScore.textContent = data.score;
+                const scoreValue = document.querySelector("#current-score .score-value");
+                scoreValue.textContent = data.score; // Update only the score's text content
             })
             .catch(error => {
                 console.error('Error:', error);
