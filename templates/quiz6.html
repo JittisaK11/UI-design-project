@@ -108,8 +108,12 @@
             <img src="{{ url_for('static', filename='quiz6_5.png') }}" alt="Rhythm pattern 5" class="quiz6-note-image">
         </div>
 
-        <button class="submit-button" onclick="checkAnswer()">Submit</button>
+        <div class="button-container">
+            <button id="submit-button" class="submit-button">Submit</button>
+            <button class="reset-button" onclick="resetPage()">Reset</button>
+        </div>
         <p class="feedback-message" id="feedback-message"></p>
+
 
     </div>
     <div class="next-button">
@@ -118,6 +122,9 @@
 
     <script>
 
+        function resetPage() {
+            location.reload(); // Reload the page
+        }
             // Define the checkAnswer() function in the global scope
     function checkAnswer() {
         const droppedPatterns = Array.from({ length: 4 }, () => "none");
@@ -135,6 +142,9 @@
         // Check if dropped patterns match the correct pattern
         if (JSON.stringify(droppedPatterns) === JSON.stringify(correctPattern)) {
             showFeedbackMessage("Correct!", true);
+            incrementScore();
+            const submitButton = document.getElementById("submit-button");
+            disableSubmitButton(); // Call function to disable the submit button
         } else {
             showFeedbackMessage("Incorrect, try again.", false);
         }
@@ -149,10 +159,8 @@
             feedbackMessage.classList.add("correct-animation");
         }
     }
-        document.addEventListener("DOMContentLoaded", function() {
-        const droppedPatterns = Array.from({ length: 4 }, () => "none");
 
-        function fetchAndUpdateScore() {
+    function fetchAndUpdateScore() {
             fetch('/score')
                 .then(response => {
                     if (!response.ok) {
@@ -170,7 +178,7 @@
         }
 
     function incrementScore() {
-        fetch('/increment-score', {
+        fetch('/increment-score2', {
                 method: 'POST'
             })
             .then(response => {
@@ -188,6 +196,17 @@
                 console.error('Error:', error);
             });
     }
+
+    function disableSubmitButton() {
+        const submitButton = document.getElementById("submit-button");
+        if (submitButton) {
+            submitButton.disabled = true; // Disable the submit button
+        } else {
+            console.error("Submit button not found.");
+        }
+    }
+        document.addEventListener("DOMContentLoaded", function() {
+        const droppedPatterns = Array.from({ length: 4 }, () => "none");
 
     // Call the function to fetch and update the score when the page loads
     fetchAndUpdateScore();
@@ -215,17 +234,19 @@
         droppedPatterns[noteIndex-1] = noteSymbol; // Update the droppedPatterns array
         const noteImage = `<img src="${draggedNote.src}" alt="${draggedNote.alt}" style="max-width: 200%; max-height: 200%;">`;
         droppedNote.innerHTML = noteImage;
-        draggedNote.style.visibility = 'hidden';
-        console.log(droppedPatterns); // For debugging
     }
 
-        // Add event listeners for drag and drop functionality
-        notesContainer.addEventListener('dragstart', dragStart);
-        gridItems.forEach(gridItem => {
+    // Add event listeners for drag and drop functionality
+    notesContainer.addEventListener('dragstart', dragStart);
+    gridItems.forEach(gridItem => {
         gridItem.addEventListener('dragover', dragOver);
         gridItem.addEventListener('drop', drop);
-    
+        gridItem.addEventListener('dragend', dragEnd); // Add dragend event listener
     });
+
+    function dragEnd(event) {
+        draggedNote.style.visibility = 'visible'; // Make the dragged note visible again
+    }
 
     // Add event listener to the submit button
     const submitButton = document.getElementById("submit-button");

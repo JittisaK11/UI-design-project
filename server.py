@@ -50,6 +50,14 @@ def increment_score():
         session['score'] = 1
     return jsonify({'success': True})
 
+@app.route('/increment-score2', methods=['POST'])
+def increment_score2():
+    if 'score' in session:
+        session['score'] += 3
+    else:
+        session['score'] = 1
+    return jsonify({'success': True})
+
 @app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
     # Set initial score to 0 if it doesn't exist in session
