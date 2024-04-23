@@ -21,6 +21,43 @@
     padding: 20px;
 }
 
+.next-button {
+  text-align: center;
+}
+
+button {
+  padding: 5px;
+  margin-top: 1px;
+  cursor: pointer;
+  background-color: #8eadd4;
+  color: white;
+  font-size: small;
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #80a6ff;
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #8eadd4;
+  border: none;
+  border-radius: 15px;
+}
+
+.button:hover {background-color: #80a6ff;}
+
+
 /* grid */
 
 .grid-container {

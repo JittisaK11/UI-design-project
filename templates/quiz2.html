@@ -1,3 +1,8 @@
+
+{% extends 'layout.html' %}
+
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,22 +13,7 @@
         body {
             font-family: Arial, sans-serif;
         }
-        .navbar {
-            overflow: hidden;
-            background-color: #8eadd4;
-        }
-        .navbar a {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-        .navbar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
+
         .container {
             padding: 20px;
         }
@@ -33,14 +23,24 @@
             align-items: center;  /* Align vertically */
         }
         .drop-container {
-            flex: 1;  /* Each container will flexibly take up equal space */
-            margin: 10px;  /* Margin for spacing between containers */
-            text-align: center;
-            padding: 20px;
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
-        }
+        flex: 1; /* Each container will flexibly take up equal space */
+        margin: 10px; /* Margin for spacing between containers */
+        text-align: center;
+        padding: 20px;
+        background-color: #f4f4f4;
+        border: 1px solid #ddd;
+        box-sizing: border-box;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .drop-container.dragover {
+        background-color: lightblue; /* Change color when item is hovering over */
+    }
+        .match-button {
+        margin: 0 auto; /* Center the match button horizontally */
+    }
+
         .next-button {
             text-align: center;
             margin-top: 20px;
@@ -58,28 +58,126 @@
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <a href="beat-and-tempo.html">Beat and Tempo</a>
-        <a href="duration-and-symbols.html">Duration and Symbols</a>
-        <a href="subdividing.html">Subdividing</a>
-        <a href="quiz">Quiz</a>
-    </div>
     <div class="container">
-        <p>Question 2) Which of these songs feature an upbeat tempo vs. downbeat tempo?
-        </p>
-        <div class="row">
-            <div class="drop-container" id="drop-container-upbeat">Upbeat</div>
-            <div class="drop-container" id="drop-container-downbeat">Downbeat</div>
-        </div>
-        <div class="row">
-        <iframe class="drop-container" width="420" height="315" src="https://www.youtube.com/embed/02AlIVN0pEA"></iframe>
-        <iframe class="drop-container" width="420" height="315" src="https://www.youtube.com/embed/p_ftrysaMHU"></iframe>
-       
-        
 
-    </div>
+        <!-- Display the current score of the user -->
+        <p>Current Score: <span id="current-score"></span></p>
+                
+        <p>Question 2) Which of these songs feature an upbeat tempo vs. downbeat tempo? Drag the labels into the drop bins like before.</p>
+        <div class="row">
+            <div style="display: flex; justify-content: space-around;">
+                <div>
+                    <div class="draggable-container" style="text-align: center;">
+                        <button class="match-button" id="button-upbeat" draggable="true">Upbeat</button>
+                    </div>
+                    <iframe class="video" width="400" height="300" src="https://www.youtube.com/embed/23GIn0h0Sn4"></iframe>
+                    <div class="drop-container" id="drop-container-1" droppable="true"></div> <!-- Drop container for video 1 -->
+                </div>
+
+                <div>
+                    <div class="draggable-container" style="text-align: center;">
+                        <button class="match-button" id="button-downbeat" draggable="true">Downbeat</button>
+                    </div>
+                    <iframe class="video" width="400" height="300" src="https://www.youtube.com/embed/oYgrFyXxZ0g"></iframe>
+                    <div class="drop-container" id="drop-container-2" droppable="true"></div> <!-- Drop container for video 2 -->
+                </div>
+            </div>
+        </div>
     <div class="next-button">
         <a href="quiz3">Next</a>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function fetchAndUpdateScore() {
+                fetch('/score')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch score');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const currentScore = document.getElementById("current-score");
+                        currentScore.textContent = data.score; // Update the score element
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+    
+            function incrementScore() {
+                fetch('/increment-score', {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to increment score');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // If increment successful, fetch and update the score
+                        fetchAndUpdateScore();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+    
+            // Call the function to fetch and update the score when the page loads
+            fetchAndUpdateScore();
+            let droppable = [true, true, true];
+
+            document.getElementById('button-upbeat').addEventListener('dragstart', function(event) {
+            event.dataTransfer.setData('text/plain', 'button-upbeat'); // Set the ID of the draggable element
+            });
+            document.getElementById('button-downbeat').addEventListener('dragstart', function(event) {
+                event.dataTransfer.setData('text/plain', 'button-downbeat'); // Set the ID of the draggable element
+            });
+    
+            // Add drag and drop event listeners to drop containers
+        const dropContainers = document.querySelectorAll('.drop-container');
+        dropContainers.forEach((container, index) => {
+            container.addEventListener('dragenter', function(event) {
+                event.preventDefault();
+                if (droppable[index]) {
+                    this.style.backgroundColor = 'yellow'; // Change background color on drag enter if droppable
+                }
+            });
+
+            container.addEventListener('dragover', function(event) {
+                event.preventDefault();
+                if (droppable[index]) {
+                    this.style.backgroundColor = 'yellow'; // Change background color on drag over if droppable
+                }
+            });
+            container.addEventListener('dragleave', function() {
+                if (droppable[index]) {
+                this.style.backgroundColor = '#f4f4f4'; // Reset background color on drag leave
+                }
+            });
+            container.addEventListener('drop', function(event) {
+                event.preventDefault();
+                if (droppable[index]) {
+                    const draggableId = event.dataTransfer.getData("text/plain");
+                    if ((draggableId === 'button-upbeat' && this.id === 'drop-container-2') ||
+                        (draggableId === 'button-downbeat' && this.id === 'drop-container-1')) {
+                        this.style.backgroundColor = 'green'; // Turn container green if correct item dropped
+                        incrementScore(); // Increment score if correct item dropped
+                        droppable[index] = false; // Set droppable to false after correct drop
+                    } else {
+                        this.style.backgroundColor = 'red'; // Reset background color if incorrect drop
+                    }
+                }
+            });
+        });
+    });
+
+    </script>
+    
 </body>
 </html>
+
+{% endblock %}
+
