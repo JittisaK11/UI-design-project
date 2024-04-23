@@ -25,6 +25,14 @@ def common():
 def duration_and_symbols():
     return render_template('duration-and-symbols.html')
 
+@app.route('/duration-and-symbols-pg2')
+def duration_and_symbols2():
+    return render_template('duration-and-symbols-pg2.html')
+
+@app.route('/duration-and-symbols-pg3')
+def duration_and_symbols3():
+    return render_template('duration-and-symbols-pg3.html')
+
 # Subdividing page route
 @app.route('/subdividing')
 def subdividing():
