@@ -21,9 +21,25 @@
     padding: 20px;
 }
 
-.next-button {
-  text-align: center;
+
+.drop-container.dragover {
+    background-color: lightblue; /* Change color when item is hovering over */
 }
+
+    .next-button {
+        text-align: center;
+        margin-top: 20px;
+    }
+    .next-button a {
+        padding: 10px 20px;
+        background-color: #8eadd4;
+        color: white;
+        text-decoration: none;
+    }
+    .next-button a:hover {
+        background-color: #ddd;
+        color: black;
+    }
 
 button {
   padding: 10px;
