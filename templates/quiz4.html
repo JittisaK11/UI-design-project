@@ -12,6 +12,11 @@
         animation: pulse 0.5s 3;
     }
 
+    .incorrect {
+        border: 2px solid red;
+        animation: shake 0.5s 1;
+    }
+
     @keyframes pulse {
         0% {
             transform: scale(1);
@@ -26,20 +31,44 @@
         }
     }
 
+    @keyframes shake {
+        0% {
+            transform: translateX(0);
+        }
+
+        25% {
+            transform: translateX(-5px);
+        }
+
+        50% {
+            transform: translateX(5px);
+        }
+
+        75% {
+            transform: translateX(-5px);
+        }
+
+        100% {
+            transform: translateX(0);
+        }
+    }
+
     .next-button {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .next-button a {
-            padding: 10px 20px;
-            background-color: #8eadd4;
-            color: white;
-            text-decoration: none;
-        }
-        .next-button a:hover {
-            background-color: #ddd;
-            color: black;
-        }
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .next-button a {
+        padding: 10px 20px;
+        background-color: #8eadd4;
+        color: white;
+        text-decoration: none;
+    }
+
+    .next-button a:hover {
+        background-color: #ddd;
+        color: black;
+    }
 </style>
 
 <div class="container">
@@ -59,10 +88,13 @@
     </div>
 </div>
 <div class="next-button">
-    <a href="quiz6">Next</a>
+    <a id="next-button" href="quiz6" style="pointer-events: none;">Next</a>
 </div>
 
 <script>
+    let answered = false; // Boolean flag to track if the correct answer has been selected
+    document.getElementById("next-button").style.pointerEvents = "auto"; // Enable the next button
+
     function fetchAndUpdateScore() {
         fetch('/score')
             .then(response => {
@@ -105,9 +137,17 @@
     function checkAnswer(element) {
         // Manually specify the correct image URL
         var correctAnswer = "/static/quiz4_3.png"; // Change this to the correct image URL
-        if (element.src.endsWith(correctAnswer)) {
-            element.classList.add("correct");
-            incrementScore();
+        if (!answered) {
+            if (element.src.endsWith(correctAnswer)) {
+                element.classList.add("correct");
+                incrementScore();
+                answered = true; // Set the flag to true to prevent further score increments
+            } else {
+                element.classList.add("incorrect");
+                setTimeout(function() {
+                    element.classList.remove("incorrect");
+                }, 1000); // Remove the "incorrect" class after 1 second
+            }
         }
     }
 </script>
