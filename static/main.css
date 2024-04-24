@@ -26,12 +26,12 @@
 }
 
 button {
-  padding: 5px;
+  padding: 10px;
   margin-top: 1px;
   cursor: pointer;
   background-color: #8eadd4;
   color: white;
-  font-size: small;
+  font-size: medium;
   border: none;
   border-radius: 5px;
 }
@@ -57,7 +57,13 @@ button:hover {
 
 .button:hover {background-color: #80a6ff;}
 
-
+.container-center {
+    margin-top: 35px;
+     /* Enables flexbox */
+    align-items: center; /* Centers vertically */
+   /* Optional: Sets the height of the container to 100% of the viewport height */
+    text-align: center; /* Ensures that the text within the container is centered, useful for inline or text elements */
+}
 /* grid */
 
 .grid-container {
@@ -79,4 +85,17 @@ button:hover {
     .grid-container {
         grid-template-columns: 1fr; /* Stack the columns on smaller screens */
     }
+}
+
+.btn-newpage{
+    background:rgb(183, 160, 204);
+}
+
+.instr{
+    color:rgb(183, 160, 204) ;
+    text-decoration: ;
+}
+
+.rhythm-image{
+    height: 100px;
 }

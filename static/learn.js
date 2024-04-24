@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 '<strong>Tempo</strong> refers to the speed or pace of a given piece of music, essentially determining how fast or slow the beat is.',
                 'It is typically measured in <strong>beats per minute (BPM)</strong>, with a higher BPM indicating a faster tempo.',
                 'The tempo sets the overall <strong>energy level</strong> of the music and can significantly affect the mood and feel of a piece.',
-                'Learn more about common tempos: <a href="' + tempoURL + '">common tempo</a>'
+                '<div class="instr">Click here to learn about the common tempos:</div> <button class="btn-newpage" > <a href="' + tempoURL + '"  style="color: white" >Common Tempo</a></button> </div>'
             ]);
         });
         button3.addEventListener('click', () => displayText([

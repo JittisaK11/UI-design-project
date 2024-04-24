@@ -73,7 +73,6 @@ def quiz():
         session['score'] = 0
     return render_template('quiz.html')
 
-<<<<<<<<< Temporary merge branch 1
 @app.route('/quiz<int:id>', methods=['GET', 'POST'])
 def quiz_id(id):
     # Constructs the filename based on the quiz ID
@@ -91,12 +90,8 @@ def reset_score():
 def add_point():
     session['score'] += 1
     return jsonify({'message': 'Point added successfully'})
-=========
-@app.route('/common-tempo')
-def common():
-    return render_template('common-tempo.html')
- 
->>>>>>>>> Temporary merge branch 2
+
+
 
 if __name__ == '__main__':
    app.run(debug=True)
