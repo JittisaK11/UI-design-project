@@ -73,30 +73,42 @@ def quiz():
         session['score'] = 0
     return render_template('quiz.html')
 
-<<<<<<<<< Temporary merge branch 1
-@app.route('/quiz<int:id>', methods=['GET', 'POST'])
-def quiz_id(id):
-    # Constructs the filename based on the quiz ID
-    quiz_file = f'quiz{id}.html'
-    return render_template(quiz_file)
-
-# Function to reset the score to 0
-@app.route('/reset_score', methods=['POST'])
+# Dynamic route for specific quiz pages like quiz1, quiz2, etc.
+@app.route('/quiz<int:quiz_number>', methods=['GET', 'POST'])
+def specific_quiz(quiz_number):
+    # Construct the template filename based on quiz_number
+    quiz_template = f'quiz{quiz_number}.html'
+    try:
+        return render_template(quiz_template)
+    except FileNotFoundError:
+        abort(404)  # If the specific quiz template is not found, show a 404 error
+	
+@app.route('/reset-score', methods=['POST'])
 def reset_score():
-    session['score'] = 0
-    return jsonify({'message': 'Score reset successfully'})
+    if 'score' in session:
+        session['score'] = 0
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False, 'message': 'Score not found in session'})
+    
+@app.route('/previous-scores', methods=['GET'])
+def get_previous_scores():
+    # Return the list of previous scores
+    return jsonify(scores)
 
-# Function to add 1 point to the score
-@app.route('/add_point', methods=['POST'])
-def add_point():
-    session['score'] += 1
-    return jsonify({'message': 'Point added successfully'})
-=========
-@app.route('/common-tempo')
-def common():
-    return render_template('common-tempo.html')
- 
->>>>>>>>> Temporary merge branch 2
+@app.route('/update-scores', methods=['POST'])
+def update_scores():
+    try:
+        # Add the current score to the scores list along with the current date
+        if 'score' in session:
+            scores.append({'score': session['score']})
+            # Clear the session score
+            session.pop('score', None)
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'message': 'Score not found in session'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
 
 if __name__ == '__main__':
    app.run(debug=True)
