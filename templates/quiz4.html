@@ -93,6 +93,7 @@
 
 <script>
     let answered = false; // Boolean flag to track if the correct answer has been selected
+    document.getElementById("next-button").style.pointerEvents = "auto"; // Enable the next button
 
     function fetchAndUpdateScore() {
         fetch('/score')
@@ -141,7 +142,6 @@
                 element.classList.add("correct");
                 incrementScore();
                 answered = true; // Set the flag to true to prevent further score increments
-                document.getElementById("next-button").style.pointerEvents = "auto"; // Enable the next button
             } else {
                 element.classList.add("incorrect");
                 setTimeout(function() {
