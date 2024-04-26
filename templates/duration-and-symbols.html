@@ -21,52 +21,47 @@
     <br>
     <!-- Visualization and play buttons here -->
     <div class="row">
-        <div class="col-md-6">
-            <img src="/static/musical_notes.jpg" alt="musical notes chart" width="90%">
-    
-      
-        </div>
-    
-        <div class="col-md-6">
+        <div class="col-md-">
             <div>
-                <button onclick="playNoteSound('whole-note')">Play Whole Note</button>
+                <button style="margin-top: 5px; margin-left: 16px" onclick="playNoteSound('whole-note')">Play Whole Note</button>
             </div>
             <br>
             <div>
-                <button onclick="playNoteSound('whole-note')">Play Half Note</button>
+                <button style="margin-left: 28px" onclick="playNoteSound('whole-note')">Play Half Note</button>
             </div>
             <br>
             <div>
-                <button onclick="playNoteSound('whole-note')">Play Quarter Note</button>
+                <button style="margin-left: 7px" onclick="playNoteSound('whole-note')">Play Quarter Note</button>
             </div>
             <br>
             <div>
-                <button onclick="playNoteSound('whole-note')">Play Eighth Note</button>
+                <button style="margin-left: 17px" onclick="playNoteSound('whole-note')">Play Eighth Note</button>
             </div>
             <br>
             <div>
                 <button onclick="playNoteSound('whole-note')">Play Sixteenth Note</button>
             </div>
-            
-            
+      
+        </div>
+        <div class="col-md-6">
+            <img src="/static/musical_notes.png" alt="musical notes chart" width="70%">
         </div>
     </div>
+    <br>
+    <br>
+
     
     <br>
     <!-- Navigation Buttons -->
+    <row>
+        <col-md-4>
+            <a href="beat-and-tempo" class="button">Previous section</a>
+        </col-md-4>
+        <col-md-4>
+            <a href="duration-and-symbols-pg2" class="button">Next page</a>
+        </col-md-4>
+    </row>
   </div>
-  <div class="row">
-    <div class="col-md-6">
-        <div class="next-button">
-            <a href="beats-and-tempo" id="next-button">Previous section</a>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="next-button">
-            <a href="duration-and-symbols-pg2" id="next-button">Next page</a>
-        </div>
-    </div>
-</div>
 
   </body>
 {% endblock %}
