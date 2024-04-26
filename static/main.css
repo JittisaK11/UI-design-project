@@ -1,5 +1,5 @@
-.body {
-    font-family: Arial, sans-serif;
+body {
+    font-family: "Gill Sans", sans-serif;;
 }
 .navbar {
     overflow: hidden;
@@ -78,8 +78,14 @@ button:hover {
      /* Enables flexbox */
     align-items: center; /* Centers vertically */
    /* Optional: Sets the height of the container to 100% of the viewport height */
-    text-align: center; /* Ensures that the text within the container is centered, useful for inline or text elements */
+    text-align: center;
+    /* Ensures that the text within the container is centered, useful for inline or text elements */
 }
+.title{
+    font-family: cursive, serif; 
+    margin: 20px;
+}
+
 /* grid */
 
 .grid-container {

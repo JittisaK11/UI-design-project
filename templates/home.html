@@ -4,8 +4,8 @@
 {% block content %}
 
     <div class="container-center">
-        <h1>Welcome to the world of music theory!</h1>
-        <p>Let’s begin by learning the basics of music through rhythm! Navigate the menu above to learn about key elements of rhythm.</p>
+        <h1 class = "title">Welcome to the world of music theory!</h1>
+        <p>Let’s begin by learning the basics of music through rhythm! Navigate the menu above to learn about key elements of rhythm.</body>
         <p>When you’re done learning, take the quiz to test your knowledge.</p>
         <button> <a href="{{ url_for('beat_and_tempo') }}" style="color: white">Start with Beats and Tempos!</a> <div><img src="{{ url_for('static', filename='q_note.png') }}" class="rhythm-image"></div></button>
         <button> <a href="{{ url_for('quiz') }}" style="color: white">Quiz yourself!</a> <div><img src="{{ url_for('static', filename='quiz.png') }}" class="rhythm-image"></div></button>
