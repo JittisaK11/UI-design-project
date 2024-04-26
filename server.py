@@ -38,6 +38,10 @@ def duration_and_symbols3():
 def subdividing():
     return render_template('subdividing.html')
 
+@app.route('/subdividing-pg2')
+def subdividing_pg2():
+    return render_template('subdividing-pg2.html')
+
 # Quiz page route
 @app.route('/', methods=['GET', 'POST'])
 def main():
