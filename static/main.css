@@ -1,5 +1,5 @@
 body {
-    font-family: "Gill Sans", sans-serif;;
+    font-family: "Gill Sans", sans-serif;
 }
 .navbar {
     overflow: hidden;
@@ -74,6 +74,7 @@ button:hover {
 .button:hover {background-color: #80a6ff;}
 
 .container-center {
+    
     margin-top: 35px;
      /* Enables flexbox */
     align-items: center; /* Centers vertically */
@@ -81,6 +82,7 @@ button:hover {
     text-align: center;
     /* Ensures that the text within the container is centered, useful for inline or text elements */
 }
+
 .title{
     font-family: cursive, serif; 
     margin: 20px;
