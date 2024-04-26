@@ -44,7 +44,7 @@ def quiz():
 def common():
     return render_template('common-tempo.html')
 
-<<<<<<<<< Temporary merge branch 1
+
 @app.route('/quiz<int:quiz_number>', methods=['GET', 'POST'])
 def specific_quiz(quiz_number):
     # Construct the template filename based on quiz_number
