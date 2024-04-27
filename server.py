@@ -42,6 +42,18 @@ def subdividing():
 def subdividing_pg2():
     return render_template('subdividing-pg2.html')
 
+@app.route('/timesignature')
+def timesignature():
+    return render_template('timesignature.html')
+
+@app.route('/timesignature-pg2')
+def timesignature_pg2():
+    return render_template('timesignature-pg2.html')
+
+@app.route('/timesignature-pg3')
+def timesignature_pg3():
+    return render_template('timesignature-pg3.html')
+
 # Quiz page route
 @app.route('/', methods=['GET', 'POST'])
 def main():
