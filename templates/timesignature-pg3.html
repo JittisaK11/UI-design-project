@@ -1,10 +1,18 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-  <head>
-  <script>
-  
-  </script>
+<head>
+    <script>
+      function showAnswer() {
+        document.getElementById('answer').style.display = 'block';
+        document.getElementById('show-answer-btn').style.display = 'none';
+      }
+    </script>
+    <style>
+      #answer {
+        font-weight: bold;
+      }
+    </style>
   </head>
   <body>
 
@@ -16,7 +24,9 @@
     <img src="/static/compoundmeter.png" alt="simple time signature" width="40%">
     <br>
     <br>
-    <p>The time signature in the image can be translated to "six eighth-note beats per measure."</p>
+    <p>Can you guess what this time signature can be translated to?</p>
+    <button id="show-answer-btn" onclick="showAnswer()">Show the answer</button>
+    <p id="answer" style="display:none;">The time signature in the image can be translated to "six eighth-note beats per measure."</p>
     <br>
     <br>
     <br>
