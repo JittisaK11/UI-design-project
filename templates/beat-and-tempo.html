@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="container">
+<div class="container low-opacity">
     <h1>What is beat, tempo, and rhythm?</h1>
     <p>Click each button below to learn about these three terms.</p>
     <div class="container">
@@ -11,14 +11,7 @@
     </div>
     <p id="display-area"></p>
     
-</div>
-
-<script>
-    var tempoURL = "{{ url_for('common') }}";
-</script>
-<script src="{{ url_for('static', filename='js/learn.js') }}"></script>
-
-<br>
+    <br>
 <br>
 <br>
 <div class="row">
@@ -30,5 +23,13 @@
         </div>
     </div>
 </div>
+</div>
+
+<script>
+    var tempoURL = "{{ url_for('common') }}";
+</script>
+<script src="{{ url_for('static', filename='js/learn.js') }}"></script>
+
+
 {% endblock %}
 
