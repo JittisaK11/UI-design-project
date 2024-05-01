@@ -1,16 +1,56 @@
 {% extends "layout.html" %}
 
-
 {% block content %}
+<style>
+  @keyframes fall {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100vh); }
+  }
 
-    <div class="container-center">
-        <h1 class = "title">Welcome to the world of music theory!</h1>
-        <p>Let’s begin by learning the basics of music through rhythm! Navigate the menu above to learn about key elements of rhythm.</p>
-        <p>When you’re done learning, take the quiz to test your knowledge.</p>
-        <button> <a href="{{ url_for('beat_and_tempo') }}" style="color: white">Start with Beats and Tempos!</a> <div><img src="{{ url_for('static', filename='q_note.png') }}" class="rhythm-image"></div></button>
-        <button> <a href="{{ url_for('quiz') }}" style="color: white">Quiz yourself!</a> <div><img src="{{ url_for('static', filename='quiz.png') }}" class="rhythm-image"></div></button>
-    </div>
+  .music-note {
+    width: 50px;
+    position: fixed;
+    top: -100px;
+    opacity: 0.7;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+  }
+
+  /* Generate multiple notes with randomized positions */
+  {% for i in range(1, 21) %}
+  .note{{i}} { 
+    left: {{ (i * 5) % 100 }}%; /* This will spread notes across the width of the screen */
+    animation-duration: {{ 4 + i % 3 }}s; /* Vary durations between 4s and 6s */
+  }
+  {% endfor %}
+</style>
+
+<script>
+  window.onload = function() {
+    setTimeout(function() {
+      var notes = document.getElementsByClassName('music-note');
+      for (var i = 0; i < notes.length; i++) {
+        notes[i].style.display = 'none';
+      }
+    }, 10000); // This will remove the notes after 10 seconds
+  }
+</script>
+
+<div class="container-center">
+    <h1 class="title">Welcome to the world of music theory!</h1>
+    <p>Let’s begin by learning the basics of music through rhythm!</p>
+    <p>Navigate the menu above to learn about key elements of rhythm.</p>
+    <p>When you’re done learning, take the quiz to test your knowledge.</p>
+    
+    <br>
+    <button style="width:150px; margin-right: 5px;"> <a href="{{ url_for('beat_and_tempo') }}" style="color: white;">Start learning!</a> <div><img src="{{ url_for('static', filename='note1.png') }}" class="rhythm-image"></div></button>
+    <button style="width:150px; margin-left: 5px"> <a href="{{ url_for('quiz') }}" style="color: white;">Quiz yourself!</a> <div><img src="{{ url_for('static', filename='quiz1.png') }}" class="rhythm-image"></div></button>
+</div>
+
+<!-- Music Notes Confetti -->
+{% for i in range(1, 21) %}
+  <img src="{{ url_for('static', filename='note' ~ (i % 2 + 1) ~ '.png') }}" class="music-note note{{i}}">
+{% endfor %}
 
 {% endblock %}
-
-
