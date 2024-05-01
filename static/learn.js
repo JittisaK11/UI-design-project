@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 '<strong>Tempo</strong> refers to the speed or pace of a given piece of music, essentially determining how fast or slow the beat is.',
                 'It is typically measured in <strong>beats per minute (BPM)</strong>, with a higher BPM indicating a faster tempo.',
                 'The tempo sets the overall <strong>energy level</strong> of the music and can significantly affect the mood and feel of a piece.',
-                '<button id="commonTemposButton">Learn about Common Tempos</button>'
+                '<button class="learn-more" id="commonTemposButton">Learn about Common Tempos</button>'
             ]);
         });
         button3.addEventListener('click', () => displayText([
@@ -63,3 +63,17 @@ function displayCommonTempos() {
     const displayArea = document.getElementById('display-area');
     displayArea.innerHTML += htmlContent;
 }
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const currentLocation = location.href;
+    const menuItems = document.querySelectorAll('.navbar .item');
+    const menuLength = menuItems.length;
+
+    for (let i = 0; i < menuLength; i++) {
+        // This checks if the link is part of the current URL
+        if (currentLocation.includes(menuItems[i].href)) {
+            menuItems[i].classList.add("active");
+        }
+    }
+});
