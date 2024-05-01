@@ -38,11 +38,12 @@
 </script>
 
 <div class="container-center">
-    <h1 class="title">Welcome to the world of music theory!</h1>
-    <p>Let’s begin by learning the basics of music through rhythm!</p>
-    <p>Navigate the menu above to learn about key elements of rhythm.</p>
-    <p>When you’re done learning, take the quiz to test your knowledge.</p>
-    
+    <h1 class="title">Welcome to the world of<br> Music Theory!</h1>
+    <div class="low-opacity">
+        <p>Let’s begin by learning the basics of music through rhythm!</p>
+        <p>Navigate the menu above to learn about key elements of rhythm.</p>
+        <p>When you’re done learning, take the quiz to test your knowledge.</p>
+    </div>
     <br>
     <button style="width:150px; margin-right: 5px;"> <a href="{{ url_for('beat_and_tempo') }}" style="color: white;">Start learning!</a> <div><img src="{{ url_for('static', filename='note1.png') }}" class="rhythm-image"></div></button>
     <button style="width:150px; margin-left: 5px"> <a href="{{ url_for('quiz') }}" style="color: white;">Quiz yourself!</a> <div><img src="{{ url_for('static', filename='quiz1.png') }}" class="rhythm-image"></div></button>

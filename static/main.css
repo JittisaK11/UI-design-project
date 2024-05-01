@@ -1,15 +1,26 @@
+
 body {
-    font-family: "Gill Sans", sans-serif;
+    font-family: Fantasy;
+    background-image: url('background.jpg'); /* Path to your image */
+    color: white;
+    background-size: cover; /* Cover the entire page */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-attachment: fixed; /* Optional: makes the background fixed during scrolling */
+    
 }
 .navbar {
     overflow: hidden;
-    background-color: #8eadd4;
+    background-color: #382a3e;
+    opacity: 75%;
+    height: 80px;
 }
+    
 .navbar a {
     float: left;
     display: block;
     color: white;
-    background-color: #8eadd4;
+    background-color: #382a3e;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -35,7 +46,7 @@ body {
     }
     .next-button a {
         padding: 10px 20px;
-        background-color: #8eadd4;
+        background-color: #6c3583;
         color: white;
         text-decoration: none;
     }
@@ -48,7 +59,7 @@ button {
   padding: 10px;
   margin-top: 1px;
   cursor: pointer;
-  background-color: #8eadd4;
+  background-color: #9678a3;
   color: white;
   font-size: medium;
   border: none;
@@ -88,8 +99,15 @@ button:hover {
 }
 
 .title{
-    font-family: cursive, serif; 
-    margin: 20px;
+    font-family: cursive;
+    margin-top: 70px;
+    margin-bottom: 35px;
+    font-size: 80px;
+}
+
+h1{
+    font-family: cursive, serif;
+    font-size: 55px;
 }
 
 /* grid */
@@ -146,3 +164,11 @@ button:hover {
     border-radius: 10px;
 }
 
+.low-opacity{
+    background-color: #382a3e;
+    opacity: 70%;
+    padding: 20px;
+    display: inline-block;
+    border-radius: 15px;
+    margin-bottom: 35px;
+}
