@@ -1,6 +1,11 @@
-
+.title{
+    font-family: cursive, fantasy;
+    margin-top: 70px;
+    margin-bottom: 35px;
+    font-size: 80px;
+}
 body {
-    font-family: Fantasy;
+    font-family: Arial;
     background-image: url('background.jpg'); /* Path to your image */
     color: white;
     background-size: cover; /* Cover the entire page */
@@ -27,7 +32,7 @@ body {
 }
 .navbar a:hover {
     color: white;
-    background-color: rgb(163, 133, 238); 
+    background-color: rgb(142, 112, 218)
     border-radius: 10px;
 }
 
@@ -37,7 +42,7 @@ body {
 
 
 .drop-container.dragover {
-    background-color: lightblue; /* Change color when item is hovering over */
+    background-color: rgb(142, 112, 218) /* Change color when item is hovering over */
 }
 
     .next-button {
@@ -59,7 +64,7 @@ button {
   padding: 10px;
   margin-top: 1px;
   cursor: pointer;
-  background-color: #9678a3;
+  background-color: #6c3583;
   color: white;
   font-size: medium;
   border: none;
@@ -67,8 +72,8 @@ button {
 }
 
 button:hover {
-    color: white;
-    background-color: rgb(163, 133, 238); 
+    background-color: #ddd;
+    color: black;
 }
 
 .button {
@@ -81,12 +86,12 @@ button:hover {
   text-decoration: none;
   outline: none;
   color: #fff;
-  background-color: #8eadd4;
+  background-color: #6c3583;
   border: none;
   border-radius: 15px;
 }
 
-.button:hover {background-color: #80a6ff;}
+.button:hover {background-color: rgb(142, 112, 218)}
 
 .container-center {
     
@@ -98,15 +103,10 @@ button:hover {
     /* Ensures that the text within the container is centered, useful for inline or text elements */
 }
 
-.title{
-    font-family: cursive;
-    margin-top: 70px;
-    margin-bottom: 35px;
-    font-size: 80px;
-}
+
 
 h1{
-    font-family: cursive, serif;
+    font-family: cursive;
     font-size: 55px;
 }
 
@@ -160,15 +160,18 @@ h1{
 
 .item.active {
     color: white;
-    background-color: rgb(163, 133, 238); /* Highlight color */
+    background-color: rgb(87, 50, 103); /* Highlight color */
     border-radius: 10px;
 }
 
 .low-opacity{
     background-color: #382a3e;
     opacity: 70%;
-    padding: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 70px;
+    margin-left: 80px;
     display: inline-block;
-    border-radius: 15px;
-    margin-bottom: 35px;
+    border-radius: 10px;
+    margin-bottom: 30px;
 }
