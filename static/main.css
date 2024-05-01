@@ -32,7 +32,7 @@ body {
 }
 .navbar a:hover {
     color: white;
-    background-color: rgb(163, 133, 238); 
+    background-color: rgb(142, 112, 218)
     border-radius: 10px;
 }
 
@@ -42,7 +42,7 @@ body {
 
 
 .drop-container.dragover {
-    background-color: lightblue; /* Change color when item is hovering over */
+    background-color: rgb(142, 112, 218) /* Change color when item is hovering over */
 }
 
     .next-button {
@@ -64,7 +64,7 @@ button {
   padding: 10px;
   margin-top: 1px;
   cursor: pointer;
-  background-color: #9678a3;
+  background-color: #6c3583;
   color: white;
   font-size: medium;
   border: none;
@@ -72,8 +72,8 @@ button {
 }
 
 button:hover {
-    color: white;
-    background-color: rgb(163, 133, 238); 
+    background-color: #ddd;
+    color: black;
 }
 
 .button {
@@ -86,12 +86,12 @@ button:hover {
   text-decoration: none;
   outline: none;
   color: #fff;
-  background-color: #8eadd4;
+  background-color: #6c3583;
   border: none;
   border-radius: 15px;
 }
 
-.button:hover {background-color: #80a6ff;}
+.button:hover {background-color: rgb(142, 112, 218)}
 
 .container-center {
     
@@ -160,7 +160,7 @@ h1{
 
 .item.active {
     color: white;
-    background-color: rgb(163, 133, 238); /* Highlight color */
+    background-color: rgb(87, 50, 103); /* Highlight color */
     border-radius: 10px;
 }
 
