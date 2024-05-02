@@ -17,6 +17,14 @@
     animation-iteration-count: 1;
   }
 
+  .container-center {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-left: 80px;
+    padding-right: 140px;
+  }
+
   /* Generate multiple notes with randomized positions */
   {% for i in range(1, 21) %}
   .note{{i}} { 
