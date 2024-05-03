@@ -13,10 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
         ]));
         button2.addEventListener('click', () => {
             displayText([
-                '<strong>Tempo</strong> refers to the speed or pace of a given piece of music, essentially determining how fast or slow the beat is.',
-                'It is typically measured in <strong>beats per minute (BPM)</strong>, with a higher BPM indicating a faster tempo.',
-                'The tempo sets the overall <strong>energy level</strong> of the music and can significantly affect the mood and feel of a piece.',
-                '<button class="learn-more" id="commonTemposButton">Learn about Common Tempos</button>'
+            '<strong>Tempo</strong> refers to the speed or pace of a given piece of music, essentially determining how fast or slow the beat is.',
+            'It is typically measured in <strong>beats per minute (BPM)</strong>, with a higher BPM indicating a faster tempo.',
+            'The tempo sets the overall <strong>energy level</strong> of the music and can significantly affect the mood and feel of a piece.',
+
+            '<br><br><button class="learn-more" id="commonTemposButton">Learn about Common Tempos</button>'
+
             ]);
         });
         button3.addEventListener('click', () => displayText([
@@ -58,24 +60,21 @@ function displayCommonTempos() {
             Tempo terms are typically conveyed through Italian words, and can be specified by a certain beats per minute (BPM) range.
             Learn some common ones here:</p>
             <div class="grid-container">
-            <div class="grid-item" style="color: black;">Adagio
+            <div class="grid-item" style="color: black;">Adagio 55–65 BPM
                 <audio controls src="/static/adagio_56bpm.m4a">
                     Your browser does not support the audio element.
                 </audio>
             </div>
-            <div class="grid-item" style="color: black;">Andante
+            <div class="grid-item" style="color: black;">Andante 73-77 BPM
                 <audio controls src="/static/andante_86bpm.m4a">
                     Your browser does not support the audio element.
                 </audio>
             </div>
-            <div class="grid-item" style="color: black;">Allegro
+            <div class="grid-item" style="color: black;">Allegro 120–156 BPM
                 <audio controls src="/static/allegro_120bpm.m4a">
                 Your browser does not support the audio element.
                 </audio>
             </div>
-        </div>
-            <a href="#" onclick="history.back();">Take Me Back</a>
-        </div>
     `;
     const displayArea = document.getElementById('display-area');
     displayArea.innerHTML += htmlContent;
