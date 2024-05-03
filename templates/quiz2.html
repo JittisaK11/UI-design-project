@@ -34,6 +34,10 @@
         align-items: center;
     }
 
+    .video-container {
+        margin: 20px; /* Margin for spacing between video containers */
+    }
+
     .drop-container.dragover {
         background-color: lightblue; /* Change color when item is hovering over */
     }
@@ -52,18 +56,19 @@
         <p>Question 2) Which of these songs feature an upbeat tempo vs. downbeat tempo? Drag the labels into the drop bins like before.</p>
         <div class="row">
             <div style="display: flex; justify-content: space-around;">
-                <div>
+                <div class="video-container">
                     <div class="draggable-container" style="text-align: center;">
                         <button class="match-button" id="button-upbeat" draggable="true">Upbeat</button>
                     </div>
+                    <br>
                     <iframe class="video" width="400" height="300" src="https://www.youtube.com/embed/23GIn0h0Sn4"></iframe>
                     <div class="drop-container" id="drop-container-1" droppable="true"></div> <!-- Drop container for video 1 -->
                 </div>
-
-                <div>
+                <div class="video-container">
                     <div class="draggable-container" style="text-align: center;">
                         <button class="match-button" id="button-downbeat" draggable="true">Downbeat</button>
                     </div>
+                    <br>
                     <iframe class="video" width="400" height="300" src="https://www.youtube.com/embed/oYgrFyXxZ0g"></iframe>
                     <div class="drop-container" id="drop-container-2" droppable="true"></div> <!-- Drop container for video 2 -->
                 </div>
