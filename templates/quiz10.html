@@ -1,0 +1,144 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+
+    
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    img {
+        width: 200px;
+        cursor: pointer;
+    }
+
+    .correct {
+        border: 2px solid green;
+        animation: pulse 0.5s 3;
+    }
+
+    .incorrect {
+        border: 2px solid red;
+        animation: shake 0.5s 1;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes shake {
+        0% {
+            transform: translateX(0);
+        }
+
+        25% {
+            transform: translateX(-5px);
+        }
+
+        50% {
+            transform: translateX(5px);
+        }
+
+        75% {
+            transform: translateX(-5px);
+        }
+
+        100% {
+            transform: translateX(0);
+        }
+    }
+
+</style>
+
+<div class="container">
+
+    <p>Current Score: <span id="current-score"></span></p>
+
+    <p>Question 8) Choose the correct answer to match the sound</p>
+    <p>Click the play button to listen to the rhythm pattern. Choose the picture that matches the rhythm pattern you hear.</p>
+    <audio controls>
+        <source src="{{ url_for('static', filename='quiz10.m4a') }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <div class="rhythm-images">
+        <img src="{{ url_for('static', filename='quiz8_1.png') }}" alt="Rhythm pattern 1" class="rhythm-image" onclick="checkAnswer(this)">
+        <img src="{{ url_for('static', filename='quiz8_2.png') }}" alt="Rhythm pattern 2" class="rhythm-image" onclick="checkAnswer(this)">
+        <img src="{{ url_for('static', filename='quiz8_3.png') }}" alt="Rhythm pattern 3" class="rhythm-image" onclick="checkAnswer(this)">
+    </div>
+</div>
+<div class="next-button">
+    <a id="next-button" href="quiz11" style="pointer-events: none;">Next</a>
+</div>
+
+<script>
+    let answered = false; // Boolean flag to track if the correct answer has been selected
+    document.getElementById("next-button").style.pointerEvents = "auto"; // Enable the next button
+
+    function fetchAndUpdateScore() {
+        fetch('/score')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch score');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const currentScore = document.getElementById("current-score");
+                currentScore.textContent = data.score; // Update the score element
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function incrementScore() {
+        fetch('/increment-score', {
+                method: 'POST'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to increment score');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // If increment successful, fetch and update the score
+                fetchAndUpdateScore();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    // Call the function to fetch and update the score when the page loads
+    fetchAndUpdateScore();
+
+    function checkAnswer(element) {
+        // Manually specify the correct image URL
+        var correctAnswer = "/static/quiz8_2.png"; // Change this to the correct image URL
+        if (!answered) {
+            if (element.src.endsWith(correctAnswer)) {
+                element.classList.add("correct");
+                incrementScore();
+                answered = true; // Set the flag to true to prevent further score increments
+            } else {
+                element.classList.add("incorrect");
+                setTimeout(function() {
+                    element.classList.remove("incorrect");
+                }, 1000); // Remove the "incorrect" class after 1 second
+            }
+        }
+    }
+</script>
+{% endblock %}
