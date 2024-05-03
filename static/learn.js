@@ -47,16 +47,16 @@ function displayCommonTempos() {
             Tempo terms are typically conveyed through Italian words, and can be specified by a certain beats per minute (BPM) range.
             Learn some common ones here:</p>
             <div class="grid-container">
-                <div class="grid-item">Adagio
-                    <audio controls src="/media/cc0-audio/t-rex-roar.mp3"></audio>
-                </div>
-                <div class="grid-item">Andante
-                    <audio controls src="/media/cc0-audio/t-rex-roar.mp3"></audio>
-                </div>
-                <div class="grid-item">Allegro
-                    <audio controls src="/media/cc0-audio/t-rex-roar.mp3"></audio>
-                </div>
+            <div class="grid-item" style="color: black;">Adagio
+                <audio controls src="/media/cc0-audio/t-rex-roar.mp3"></audio>
             </div>
+            <div class="grid-item" style="color: black;">Andante
+                <audio controls src="/media/cc0-audio/t-rex-roar.mp3"></audio>
+            </div>
+            <div class="grid-item" style="color: black;">Allegro
+                <audio controls src="/media/cc0-audio/t-rex-roar.mp3"></audio>
+            </div>
+        </div>
             <a href="#" onclick="history.back();">Take Me Back</a>
         </div>
     `;

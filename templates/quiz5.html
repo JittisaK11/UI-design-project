@@ -1,0 +1,186 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    img {
+        width: 200px;
+        cursor: pointer;
+    }
+
+    .correct {
+        animation: pulse 0.5s 3;
+    }
+
+    /* Additional CSS for the input fields */
+    .number-input {
+        display: block;
+        margin-bottom: 10px; /* Adjust as needed */
+    }
+
+    .line {
+        border-top: 2px solid rgb(255, 255, 255);
+        width: 17%;
+        margin: 10px 0;
+    }
+
+    /* Additional CSS for feedback text */
+    .feedback-text {
+        margin-top: 10px;
+        font-weight: bold;
+        color: red;
+        animation: pulse 0.5s 3;
+        display: none; /* Hide by default */
+    }
+
+    .correct-feedback {
+        color: green;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    /* Additional CSS for hint text */
+    .hint {
+        color: white;
+        display: none; /* Hide by default */
+        animation: fadein 1s;
+    }
+
+    @keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+</style>
+
+<div class="container">
+    <p>Current Score: <span id="current-score"></span></p>
+
+    <p>Question 5) Type in a possible time signature to this audio below.</p>
+    <p>Click the play button to listen to the song.</p>
+    <audio controls>
+        <source src="{{ url_for('static', filename='quiz5.m4a') }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+</div>
+
+<div class="container">
+    <form id="answer-form">
+        <!-- First input field -->
+        <input type="text" id="first-box" class="number-input" placeholder="Enter first number">
+        
+        <!-- Line -->
+        <div class="line"></div>
+        
+        <!-- Second input field -->
+        <input type="text" id="second-box" class="number-input" placeholder="Enter second number">
+        
+        <button type="submit" id="submit-button">Submit</button>
+    </form>
+
+    <!-- Feedback text -->
+    <div id="feedback-text" class="feedback-text"></div>
+
+    <!-- Hint text -->
+    <div id="hint-text" class="hint">Hint: Take the snare drum as the first beat of a measure! Also, the audio captures around 4 complete measures.</div>
+</div>
+
+<div class="next-button">
+    <a id="next-button" href="quiz6">Next</a>
+</div>
+
+<script>
+    function fetchAndUpdateScore() {
+        fetch('/score')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch score');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const currentScore = document.getElementById("current-score");
+                currentScore.textContent = data.score; // Update the score element
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function incrementScore() {
+        fetch('/increment-score', {
+                method: 'POST'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to increment score');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // If increment successful, fetch and update the score
+                fetchAndUpdateScore();
+                displayFeedback("Correct!", true);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function displayFeedback(text, isCorrect) {
+        const feedbackText = document.getElementById("feedback-text");
+        feedbackText.textContent = text;
+        feedbackText.style.display = "block";
+
+        if (isCorrect) {
+            feedbackText.classList.add("correct-feedback");
+            feedbackText.classList.remove("incorrect-feedback");
+            feedbackText.classList.add("correct");
+            feedbackText.classList.remove("incorrect");
+            // Disable the submit button
+            document.getElementById("submit-button").disabled = true;
+        } else {
+            feedbackText.classList.remove("correct-feedback");
+            feedbackText.classList.add("incorrect-feedback");
+            feedbackText.classList.remove("correct");
+            feedbackText.classList.add("incorrect");
+            document.getElementById("submit-button").disabled = false; // Enable the submit button
+            setTimeout(() => {
+                document.getElementById("hint-text").style.display = "block"; // Display the hint text after 2 seconds
+            }, 2000);
+        }
+    }
+
+    // Call the function to fetch and update the score when the page loads
+    fetchAndUpdateScore();
+
+    // Add an event listener to the form submission
+    document.getElementById("answer-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        // Retrieve the values entered by the user
+        const firstValue = document.getElementById("first-box").value;
+        const secondValue = document.getElementById("second-box").value;
+
+        // Check if the values meet the specified criteria
+        if (firstValue === "6" && secondValue === "8") {
+            // Handle correct answer
+            incrementScore(); // Call the function to increment the score (assuming it's defined somewhere)
+        } else {
+            // Handle incorrect answer
+            displayFeedback("Incorrect, try again.", false);
+        }
+
+        // Reset the input fields after submission (optional)
+        document.getElementById("first-box").value = "";
+        document.getElementById("second-box").value = "";
+    });
+</script>
+{% endblock %}

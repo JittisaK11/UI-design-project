@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-    <head>
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,24 +17,45 @@
     <!-- Main CSS -->
     <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
 
-    <script src="{/static/learn.js}"></script>
+    <style>
+        /* Add fade-in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px); /* Start the div 20px below its normal position */
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* Apply transition to opacity and transform */
+        }
+
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0); /* Return the div to its normal position */
+        }
+    </style>
+</head>
 <body>
 
-    <div class="navbar">
-        <a class="item" href="{{ url_for('home') }}">Home</a> <!-- This line is missing in your provided code -->
-        <a class="item" href="{{ url_for('beat_and_tempo') }}">Beat and Tempo</a>
-        <a class="item" href="{{ url_for('duration_and_symbols') }}">Duration and Symbols</a>
-        <a class="item" href="{{ url_for('subdividing') }}">Subdividing</a>
-        <a class="item" href="{{ url_for('timesignature') }}">Time Signatures</a>
-        <a class="item" href="{{ url_for('quiz') }}">Quiz</a>
-    </div>
+<div class="navbar">
+    <a class="item" href="{{ url_for('home') }}">Home</a>
+    <a class="item" href="{{ url_for('beat_and_tempo') }}">Beat and Tempo</a>
+    <a class="item" href="{{ url_for('duration_and_symbols') }}">Duration and Symbols</a>
+    <a class="item" href="{{ url_for('subdividing') }}">Subdividing</a>
+    <a class="item" href="{{ url_for('timesignature') }}">Time Signatures</a>
+    <a class="item" href="{{ url_for('quiz') }}">Quiz</a>
+</div>
 
-    <div class="container">   
-        {% block content %}
-        {% endblock %}
-    </div>
-    {% block scripts %}
-        <script src="{{ url_for('static', filename='learn.js') }}"></script>
+<div class="container fade-in" id="content"> <!-- Add fade-in class here -->
+    {% block content %}
     {% endblock %}
+</div>
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='learn.js') }}"></script>
+    <script>
+        // Add active class to trigger fade-in effect
+        $(document).ready(function() {
+            $('#content').addClass('active');
+        });
+    </script>
+{% endblock %}
 
 </body>
+</html>
