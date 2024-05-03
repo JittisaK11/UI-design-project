@@ -30,7 +30,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function displayText(points) {
     const displayArea = document.getElementById('display-area');
-    const formattedText = '<ul>' + points.map(point => `<li>${point}</li>`).join('') + '</ul>';
+    let formattedText = '<ul>';
+    
+    points.forEach(point => {
+        // Check if the point is the button element
+        if (point.includes('button class="learn-more"')) {
+            formattedText += point; // Append without wrapping in <li>
+        } else {
+            formattedText += `<li>${point}</li>`; // Wrap normal points in <li>
+        }
+    });
+
+    formattedText += '</ul>';
     displayArea.innerHTML = formattedText;
 
     const commonTemposButton = document.getElementById('commonTemposButton');
@@ -48,13 +59,19 @@ function displayCommonTempos() {
             Learn some common ones here:</p>
             <div class="grid-container">
             <div class="grid-item" style="color: black;">Adagio
-                <audio controls src="/media/cc0-audio/t-rex-roar.mp3"></audio>
+                <audio controls src="/static/adagio_56bpm.m4a">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
             <div class="grid-item" style="color: black;">Andante
-                <audio controls src="/media/cc0-audio/t-rex-roar.mp3"></audio>
+                <audio controls src="/static/andante_86bpm.m4a">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
             <div class="grid-item" style="color: black;">Allegro
-                <audio controls src="/media/cc0-audio/t-rex-roar.mp3"></audio>
+                <audio controls src="/static/allegro_120bpm.m4a">
+                Your browser does not support the audio element.
+                </audio>
             </div>
         </div>
             <a href="#" onclick="history.back();">Take Me Back</a>
