@@ -19,15 +19,20 @@
             gap: 8px; /* Space between grid items */
         }
         .grid-item {
+            display: flex; /* Use flexbox for alignment */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
             border: 1px solid black; /* Border to visualize the grid item */
             height: 60px; /* Fixed height, adjust as needed */
         }
 
         .grid-item.span-3 { grid-column: span 3; }
-        .yellow { background-color: #FFFF99; }
+        .while { background-color: whitesmoke; }
 
         .quiz6-note-image {
-            width: 100px;
+            height: 60px;
+            width: auto;
+            padding: 0 6px;
         }
 
         .submit-button {
@@ -85,17 +90,16 @@
         </audio></div>
         
         <div class="grid-container">
-            <img id="time-signature-img" src="{{ url_for('static', filename='quiz6_timesignature.png') }}" alt="Rhythm Time Signature" class="rhythm-image">
-            <div class="grid-item yellow span-3"></div>
-            <div class="grid-item yellow span-3"></div>
-            <div class="grid-item yellow span-3"></div>
-            <div class="grid-item yellow span-3"></div>
+            <div class="grid-item span-3"></div>
+            <div class="grid-item span-3"></div>
+            <div class="grid-item span-3"></div>
+            <div class="grid-item span-3"></div>
         </div>
+        <br>
         <div class="rhythm-images">
             <img src="{{ url_for('static', filename='quiz6_4.png') }}" alt="Rhythm pattern 4" class="quiz6-note-image">
             <img src="{{ url_for('static', filename='quiz6_2.png') }}" alt="Rhythm pattern 2" class="quiz6-note-image">
             <img src="{{ url_for('static', filename='quiz6_1.png') }}" alt="Rhythm pattern 1" class="quiz6-note-image">
-            <img src="{{ url_for('static', filename='quiz6_5.png') }}" alt="Rhythm pattern 5" class="quiz6-note-image">
             <img src="{{ url_for('static', filename='quiz6_3.png') }}" alt="Rhythm pattern 3" class="quiz6-note-image">
         </div>
 
