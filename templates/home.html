@@ -4,7 +4,7 @@
 <style>
   @keyframes fall {
     0% { transform: translateY(-100%); }
-    100% { transform: translateY(100vh); }
+    100% { transform: translateY(calc(100vh + 100%)); } /* Make sure notes end completely off-screen */
   }
 
   .music-note {
@@ -15,6 +15,7 @@
     animation-name: fall;
     animation-timing-function: linear;
     animation-iteration-count: 1;
+    animation-fill-mode: forwards; /* This ensures they stay at their final position */
   }
 
   .container-center {
