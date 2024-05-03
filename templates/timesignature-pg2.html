@@ -7,7 +7,29 @@
         document.getElementById('answer').style.display = 'block';
         document.getElementById('show-answer-btn').style.display = 'none';
       }
+
+      var currentAudio = null; // This variable will hold the current audio object
+
+      function playAudio() {
+        // If there is an audio playing, stop it first
+        if (currentAudio) {
+          currentAudio.pause(); // Stop the currently playing audio
+          currentAudio.currentTime = 0; // Reset the audio to the start
+        }
+
+        // Create a new audio object and play it
+        currentAudio = new Audio('{{ url_for('static', filename='2_4.m4a') }}');
+        currentAudio.play();
+      }
+
+      setTimeout(function() {
+        if (currentAudio) {
+          currentAudio.pause(); // Stop the audio
+          currentAudio.currentTime = 0; // Reset the audio to the start if needed
+        }
+      }, 15000);
     </script>
+
     <style>
       #answer {
         font-weight: bold;
@@ -32,7 +54,7 @@
     </div>
     <br>
     <br>
-    <p>How do we interpret this time signature?</p>
+    <p>How do we interpret this time signature? To listen to a song that uses this time signature, click here: <img src="{{ url_for('static', filename='audio.png') }}" alt="Play Audio" onclick="playAudio()" style="cursor: pointer; width:30px"/></p>
     <button id="show-answer-btn" onclick="showAnswer()">Show the answer</button>
     <p id="answer" style="display:none;">The time signature in the image can be interpreted as "two quarter-note beats per measure."</p>
     <br>
