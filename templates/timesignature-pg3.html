@@ -11,22 +11,28 @@
       var currentAudio = null; // This variable will hold the current audio object
 
       function playAudio() {
-        // If there is an audio playing, stop it first
-        if (currentAudio) {
+      // If there is an audio playing, stop it first
+      if (currentAudio) {
           currentAudio.pause(); // Stop the currently playing audio
           currentAudio.currentTime = 0; // Reset the audio to the start
-        }
+      }
 
-        // Create a new audio object and play it
-        currentAudio = new Audio('{{ url_for('static', filename='6_8.m4a') }}');
-        currentAudio.play();
+      // Create a new audio object and play it
+      currentAudio = new Audio('{{ url_for('static', filename='6_8.m4a') }}');
+      currentAudio.play();
+      document.getElementById('stop-audio-btn').style.display = 'inline'; // Show the stop button
+      }
+
+      function stopAudio() {
+          if (currentAudio) {
+              currentAudio.pause();
+              currentAudio.currentTime = 0; // Reset the audio
+              document.getElementById('stop-audio-btn').style.display = 'none'; // Hide the stop button
+          }
       }
 
       setTimeout(function() {
-        if (currentAudio) {
-          currentAudio.pause(); // Stop the audio
-          currentAudio.currentTime = 0; // Reset the audio to the start if needed
-        }
+          stopAudio(); // Call the stopAudio function to ensure the audio stops after 15 seconds
       }, 15000);
     </script>
     <style>
@@ -53,7 +59,7 @@
     </div>
     <br>
     <br>
-    <p>How do we interpret this time signature? To listen to a song that uses this time signature, click here: <img src="{{ url_for('static', filename='audio.png') }}" alt="Play Audio" onclick="playAudio()" style="cursor: pointer; width:30px"/></p>
+    <p>How do we interpret this time signature? To listen to a song that uses this time signature, click here: <img src="{{ url_for('static', filename='audio.png') }}" alt="Play Audio" onclick="playAudio()" style="cursor: pointer; width:30px"/> <button id="stop-audio-btn" onclick="stopAudio()" style="display:none;">Stop Audio</button>    </p>
     <button id="show-answer-btn" onclick="showAnswer()">Show the answer</button>
     <p id="answer" style="display:none;">The time signature in the image can be interpreted as "six eighth-note beats per a measure." When hearing music, time signatures can often be interpreted as the ways notes can be heard as a group. The most common ones are 4/4, and 6/8, and 2/4.</p>
     <br>
