@@ -1,53 +1,103 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
 <style>
-
     body {
         font-family: Arial, sans-serif;
     }
-    #current-score {
-        background-color: rgb(50, 50, 50); /* Grey background */
-        border-radius: 10px; /* Rounded corners */
-        padding: 20px; /* Some padding */
-        text-align: center; /* Center-align text */
-        margin: 20px 0; /* Margin above and below the box */
-        display: inline-block; /* Needed to apply padding and radius */
-        width: fit-content; /* Ensures the div only takes up the necessary width */
+
+    img {
+        width: 200px;
+        cursor: pointer;
     }
-    
-    #current-score .score-value {
-        color: #649de4; /* Blue text for the score */
-        font-size: 24px; /* Larger font size for the score */
-        display: block; /* Ensures the score appears on the next line */
+
+    .correct {
+        animation: pulse 0.5s 3;
     }
+
+    /* Additional CSS for the input fields */
+    .number-input {
+        display: block;
+        margin-bottom: 10px; /* Adjust as needed */
+    }
+
+    .line {
+        border-top: 2px solid rgb(255, 255, 255);
+        width: 17%;
+        margin: 10px 0;
+    }
+
+    /* Additional CSS for feedback text */
+    .feedback-text {
+        margin-top: 10px;
+        font-weight: bold;
+        color: red;
+        animation: pulse 0.5s 3;
+        display: none; /* Hide by default */
+    }
+
+    .correct-feedback {
+        color: green;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    /* Additional CSS for hint text */
+    .hint {
+        color: white;
+        display: none; /* Hide by default */
+        animation: fadein 1s;
+    }
+
+    @keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
 </style>
 
 <div class="container">
-    <h1>Congrats!</h1>
-    <p>You have completed learning about the "Elements of Rhythm." We hope this becomes useful in your future musical endeavors! Wishing you lots of luck. Thank you for your visit. :)</p>
-    <div id="current-score">
-        Final Score:
-        <span class="score-value">[SCORE]</span> <!-- The actual score in blue -->
-    </div>
-    <br>
+    <p>Current Score: <span id="current-score"></span></p>
 
-    <div id="current-score">
-        Previous Scores:
-        <table id="score-table">
-            <span class="score-value">
-                <tbody>
-                    <!-- Previous scores will be dynamically added here -->
-                </tbody>
-            </span> <!-- The actual score in blue -->
-        </table>
-    </div>
+    <p>Question 7) Type in a possible time signature to this audio below, if the number of measures played in total is 8.</p>
+    <p>Click the play button to listen to the song.</p>
+    <audio controls>
+        <source src="{{ url_for('static', filename='quiz7.m4a') }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+</div>
+
+<div class="container">
+    <form id="answer-form">
+        <!-- First input field -->
+        <input type="text" id="first-box" class="number-input" placeholder="Enter first number">
+        
+        <!-- Line -->
+        <div class="line"></div>
+        
+        <!-- Second input field -->
+        <input type="text" id="second-box" class="number-input" placeholder="Enter second number">
+        
+        <button type="submit" id="submit-button">Submit</button>
+    </form>
+
+    <!-- Feedback text -->
+    <div id="feedback-text" class="feedback-text"></div>
+
+    <!-- Hint text -->
+    <div id="hint-text" class="hint">Hint: Take every pluck as an eighth node, and make every 2 eighth notes count as a beat. The top and botton number should be the same!</div>
+</div>
+
+<div class="next-button">
+    <a id="next-button" href="quiz8">Next</a>
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Fetch and display the current score
+    function fetchAndUpdateScore() {
         fetch('/score')
             .then(response => {
                 if (!response.ok) {
@@ -56,47 +106,81 @@
                 return response.json();
             })
             .then(data => {
-                const scoreValue = document.querySelector("#current-score .score-value");
-                scoreValue.textContent = data.score; // Update only the score's text content
+                const currentScore = document.getElementById("current-score");
+                currentScore.textContent = data.score; // Update the score element
             })
             .catch(error => {
                 console.error('Error:', error);
             });
+    }
 
-        // Trigger the update scores endpoint to submit the current score
-        fetch('/update-scores', {
-            method: 'POST'
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to update scores');
-            }
-            return response.json();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-
-        // Fetch and display previous scores
-        fetch('/previous-scores')
+    function incrementScore() {
+        fetch('/increment-score', {
+                method: 'POST'
+            })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Failed to fetch previous scores');
+                    throw new Error('Failed to increment score');
                 }
                 return response.json();
             })
-            .then(scores => {
-                const scoreTableBody = document.querySelector("#score-table tbody");
-                scores.forEach(score => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `<td>${score.score}</td>`;
-                    scoreTableBody.prepend(row);
-                });
+            .then(data => {
+                // If increment successful, fetch and update the score
+                fetchAndUpdateScore();
+                displayFeedback("Correct!", true);
             })
             .catch(error => {
                 console.error('Error:', error);
             });
+    }
+
+    function displayFeedback(text, isCorrect) {
+        const feedbackText = document.getElementById("feedback-text");
+        feedbackText.textContent = text;
+        feedbackText.style.display = "block";
+
+        if (isCorrect) {
+            feedbackText.classList.add("correct-feedback");
+            feedbackText.classList.remove("incorrect-feedback");
+            feedbackText.classList.add("correct");
+            feedbackText.classList.remove("incorrect");
+            // Disable the submit button
+            document.getElementById("submit-button").disabled = true;
+        } else {
+            feedbackText.classList.remove("correct-feedback");
+            feedbackText.classList.add("incorrect-feedback");
+            feedbackText.classList.remove("correct");
+            feedbackText.classList.add("incorrect");
+            document.getElementById("submit-button").disabled = false; // Enable the submit button
+            setTimeout(() => {
+                document.getElementById("hint-text").style.display = "block"; // Display the hint text after 2 seconds
+            }, 2000);
+        }
+    }
+
+    // Call the function to fetch and update the score when the page loads
+    fetchAndUpdateScore();
+
+    // Add an event listener to the form submission
+    document.getElementById("answer-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        // Retrieve the values entered by the user
+        const firstValue = document.getElementById("first-box").value;
+        const secondValue = document.getElementById("second-box").value;
+
+        // Check if the values meet the specified criteria
+        if (firstValue === "4" && secondValue === "4") {
+            // Handle correct answer
+            incrementScore(); // Call the function to increment the score (assuming it's defined somewhere)
+        } else {
+            // Handle incorrect answer
+            displayFeedback("Incorrect, try again.", false);
+        }
+
+        // Reset the input fields after submission (optional)
+        document.getElementById("first-box").value = "";
+        document.getElementById("second-box").value = "";
     });
 </script>
-
 {% endblock %}

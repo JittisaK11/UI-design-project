@@ -18,6 +18,7 @@
             grid-template-columns: repeat(16, 1fr); /* Adjust the number of columns as needed */
             gap: 8px; /* Space between grid items */
         }
+
         .grid-item {
             display: flex; /* Use flexbox for alignment */
             justify-content: center; /* Center horizontally */
@@ -34,7 +35,6 @@
             width: auto;
             padding: 0 6px;
         }
-
         .submit-button {
         margin-top: 20px;
         background-color: #8eadd4;
@@ -83,9 +83,9 @@
         <!-- Display the current score of the user -->
         <p>Current Score: <span id="current-score"></span></p>
 
-        <p>Question 6) Choose the correct answer to match the sound</p>
+        <p>Question 9) Choose the correct answer to match the sound</p>
         <div><audio controls>
-            <source src="{{ url_for('static', filename='quiz6.m4a') }}" type="audio/mpeg">
+            <source src="{{ url_for('static', filename='quiz9.m4a') }}" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio></div>
         
@@ -95,7 +95,6 @@
             <div class="grid-item white span-3"></div>
             <div class="grid-item white span-3"></div>
         </div>
-        <br>
         <div class="rhythm-images">
             <img src="{{ url_for('static', filename='quiz6_4.png') }}" alt="Rhythm pattern 4" class="quiz6-note-image">
             <img src="{{ url_for('static', filename='quiz6_2.png') }}" alt="Rhythm pattern 2" class="quiz6-note-image">
@@ -112,7 +111,7 @@
 
     </div>
     <div class="next-button">
-        <a href="quiz7">Next</a>
+        <a href="quiz10">Next</a>
     </div>
 
     <script>
@@ -123,7 +122,7 @@
             // Define the checkAnswer() function in the global scope
     function checkAnswer() {
         const droppedPatterns = Array.from({ length: 4 }, () => "none");
-        const correctPattern = ['Rhythm pattern 1', 'Rhythm pattern 2', 'Rhythm pattern 3', 'Rhythm pattern 4'];
+        const correctPattern = ['Rhythm pattern 4', 'Rhythm pattern 4', 'Rhythm pattern 2', 'Rhythm pattern 2'];
 
         // Retrieve dropped patterns
         const gridItems = document.querySelectorAll('.grid-container .grid-item');

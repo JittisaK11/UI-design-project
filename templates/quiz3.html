@@ -33,21 +33,24 @@
        
 
         .container img {
-            width: 100px;  /* Fixed width for all images */
-            height: auto;  /* Height adjusts according to the aspect ratio */
-            margin: 10px;  /* Spacing between images */
+            width: auto;  /* Fixed width for all images */
+            height: 60px;  /* Height adjusts according to the aspect ratio */
+            margin: 20px;  /* Spacing between images */
         }
 
         .grid-container {
             width: 50%;
             display: grid;
             grid-template-columns: repeat(16, 1fr); /* Adjust the number of columns as needed */
-            gap: 8px; /* Space between grid items */
+            gap: 10px; /* Space between grid items */
         }
         .grid-item {
-            border: 1px solid black; /* Border to visualize the grid item */
-            height: 100px; /* Fixed height, adjust as needed */
-            width: auto;
+            display: flex;  /* Align child content centrally */
+            justify-content: center;
+            align-items: center;
+            border: 1px solid black;
+            height: 70px;
+            background-color: transparent;
         }
         /* Color classes for different grid items */
         .blue { background-color: #87CEEB; }
@@ -86,25 +89,20 @@
                 
         <p>Question 3) Drag and drop the correct note symbols for the corresponding duration blocks.</p>
         <div class="notes-container">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Music-wholenote.svg" alt="whole note" draggable="true" revert="true">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Music-halfnote.svg" alt="half note" draggable="true" revert="true">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Music-quarternote.svg" alt="quarter note" draggable="true" revert="true">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Eighth_Note.JPG" alt="eighth note" draggable="true" revert="true">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/57/Music-sixteenthnote.svg" alt="sixteenth note" draggable="true" revert="true">
+            <img src="static/whole_note.png" alt="whole note" draggable="true" revert="true">
+            <img src="static/half_note.png" alt="half note" draggable="true" revert="true">
+            <img src="static/quarter_note.png" alt="quarter note" draggable="true" revert="true">
+            <img src="static/eighth_note.png" alt="eighth note" draggable="true" revert="true">
+            <img src="static/sixteenth_note.png" alt="sixteenth note" draggable="true" revert="true">
         </div>
         <div class="grid-container">
-            <!-- Row 1 -->
-            <div class="grid-item blue span-16"></div>
-            
             <!-- Row 2 -->
             <div class="grid-item green span-8"></div>
             <div class="grid-item green span-8"></div>
+
+            <!-- Row 1 -->
+            <div class="grid-item blue span-16"></div>
             
-            <!-- Row 3 -->
-            <div class="grid-item yellow span-4"></div>
-            <div class="grid-item yellow span-4"></div>
-            <div class="grid-item yellow span-4"></div>
-            <div class="grid-item yellow span-4"></div>
             
             <!-- Row 4 -->
             <div class="grid-item orange span-2"></div>
@@ -115,6 +113,12 @@
             <div class="grid-item orange span-2"></div>
             <div class="grid-item orange span-2"></div>
             <div class="grid-item orange span-2"></div>
+
+            <!-- Row 3 -->
+            <div class="grid-item yellow span-4"></div>
+            <div class="grid-item yellow span-4"></div>
+            <div class="grid-item yellow span-4"></div>
+            <div class="grid-item yellow span-4"></div>
             
             <!-- Row 5 -->
             <div class="grid-item red"></div>

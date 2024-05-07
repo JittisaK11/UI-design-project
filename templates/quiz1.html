@@ -22,14 +22,18 @@
             align-items: center;  /* Align vertically */
         }
         .drop-container {
-        flex: 1; /* Each container will flexibly take up equal space */
-        margin: 10px; /* Margin for spacing between containers */
-        text-align: center;
-        padding: 20px;
-        background-color: #f4f4f4;
-        border: 1px solid #ddd;
-        box-sizing: border-box;
-    }
+            flex: 1; /* Each container will flexibly take up equal space */
+            margin: 10px; /* Margin for spacing between containers */
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+        .video-container {
+            margin: 20px; /* Margin for spacing between video containers */
+        }
+    
 
   
     </style>
@@ -45,27 +49,30 @@
             <p>Question 1) Match these songs to the tempo terms by dragging the labels to the drop bins under their corresponding video</video></p>
             <div class="row">
                 <div style="display: flex; justify-content: space-around;">
-                    <div>
+                    <div class="video-container">
                         <div class="draggable-container" style="text-align: center;">
                             <button class="match-button" id="button-adagio" draggable="true">Adagio</button>
                         </div>
-                        <iframe class="video" width="400" height="300" src="https://www.youtube.com/embed/02AlIVN0pEA"></iframe>
+                        <br>
+                        <iframe class="video" width="300" height="300" src="https://www.youtube.com/embed/02AlIVN0pEA"></iframe>
                         <div class="drop-container" id="drop-container-1" droppable="true"></div> <!-- Drop container for video 1 -->
                     </div>
 
-                    <div>
+                    <div class="video-container">
                         <div class="draggable-container" style="text-align: center;">
                             <button class="match-button" id="button-andante" draggable="true">Andante</button>
                         </div>
-                        <iframe class="video" width="400" height="300" src="https://www.youtube.com/embed/VOLy6JxEDLw"></iframe>
+                        <br>
+                        <iframe class="video" width="300" height="300" src="https://www.youtube.com/embed/VOLy6JxEDLw"></iframe>
                         <div class="drop-container" id="drop-container-2" droppable="true"></div> <!-- Drop container for video 2 -->
                     </div>
 
-                    <div>
+                    <div class="video-container">
                         <div class="draggable-container" style="text-align: center;">
                             <button class="match-button" id="button-allegro" draggable="true">Allegro</button>
                         </div>
-                        <iframe class="video" width="400" height="300" src="https://www.youtube.com/embed/zplA4AnhCk8"></iframe>
+                        <br>
+                        <iframe class="video" width="300" height="300" src="https://www.youtube.com/embed/zplA4AnhCk8"></iframe>
                         <div class="drop-container" id="drop-container-3" droppable="true"></div> <!-- Drop container for video 3 -->
                     </div>
                 </div>
